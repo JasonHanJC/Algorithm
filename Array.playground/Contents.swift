@@ -440,15 +440,136 @@ moveZeros(&moveZerosArray)
  ## Container With Most Water
  
  Given n non-negative integers a1, a2, ..., an, where each represents a point at coordi- nate (i, ai). n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together with x-axis forms a container, such that the container contains the most water.
+ 
+ Idea: use two pointer left and right, if leftVal < rightVal, left ++, else right--, until left >= right. Keep tracking the size, min(leftVal, rightVal) * (right - left)
  */
 
 // func containerWithMostWater
 
 
+func containerWithMostWater(_ nums: [Int]) -> Int {
+    
+    var maxSize = 0
+    
+    guard nums.count > 1 else {
+        return maxSize
+    }
+    
+    var l = 0
+    var r = nums.count - 1
+    
+    while l < r {
+        
+        let curSize = min(nums[l], nums[r]) * (r - l)
+        maxSize = max(maxSize, curSize)
+        
+        if nums[l] < nums[r] {
+            l += 1
+        } else {
+            r -= 1
+        }
+    }
+    
+    return maxSize
+}
+
+containerWithMostWater([1, 0, 0, 2, 3, 4])
 
 
+/*:
+ ## Candy
+ There are N children standing in a line. Each child is assigned a rating value. You are giving candies to these children subjected to the following requirements:
+ 1. Each child must have at least one candy. 2. Children with a higher rating get more candies than their neighbors.
+ What is the minimum candies you must give?
+ 
+ Tip: The same rating will not have the same candies. only consider higher rating
+ */
 
+func candy(_ ratings: [Int]) -> Int {
+    
+    if ratings.count == 1 {
+        return 1
+    }
+    
+    var res = 0
+    
+    // give everyone a candy
+    var candy = Array(repeating: 1, count: ratings.count)
+    
+    // left to right
+    for i in 0...ratings.count - 2 {
+        if ratings[i] < ratings[i + 1] {
+            candy[i + 1] = candy[i] + 1
+        }
+    }
 
+    // right to left
+    for r in (1...ratings.count - 1).reversed() {
+        if ratings[r] < ratings[r - 1] {
+            candy[r - 1] = max(candy[r] + 1, candy[r - 1])
+        }
+    }
+    
+    for i in 0...candy.count - 1 {
+        res += candy[i]
+    }
+    
+    return res
+}
+
+candy([1,2,2])
+
+/*:
+ ##Trapping Rain Water
+ Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it is able to trap after raining.
+ For example, given [0,1,0,2,1,0,1,3,2,1,2,1], return 6.
+ 
+ Idea: left to right, keep tracking the current highest bar, calculate the possible water trap by highest height - current bar height, store them in a array.
+ right to left, same as above
+ compare two possible traping water arrays, the min(left, right) is the real traping wather vol
+ */
+
+func trappingRainWater(_ barHeight: [Int]) -> Int {
+    
+    if barHeight.count < 3 {
+        return 0
+    }
+    
+    var left = Array(repeating: 0, count: barHeight.count)
+    var right = Array(repeating: 0, count: barHeight.count)
+    
+    var maxBar = 0
+    
+    // left to right
+    for i in 0...barHeight.count - 2 {
+        maxBar = max(maxBar, barHeight[i])
+        
+        if barHeight[i + 1] < maxBar {
+            left[i + 1] = maxBar - barHeight[i + 1]
+        }
+    }
+    
+    maxBar = 0
+    
+    // right to left
+    for i in (1...barHeight.count - 1).reversed() {
+         maxBar = max(maxBar, barHeight[i])
+        
+        if barHeight[i - 1] < maxBar {
+            right[i - 1] = maxBar - barHeight[i - 1]
+        }
+    }
+    
+    // calculate the water volume
+    var res = 0
+    for i in 0...left.count - 1 {
+        res += min(left[i], right[i])
+    }
+    
+    return res
+}
+
+trappingRainWater([0,1,0,2,1,0,1,3,2,1,2,1])
 
 
 
