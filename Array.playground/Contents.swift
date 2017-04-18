@@ -730,5 +730,59 @@ func shortestWordDistanceIII(_ words: [String], _ word1: String, _ word2: String
     return distance
 }
 
+/*:
+ ## Intersection of Two Arrays
+ Given two arrays, write a function to compute their intersection.
+ Example: Given nums1 = [1, 2, 2, 1], nums2 = [2, 2], return [2].
+ Just return the same item once. So we can use Set to solve the problem
+ */
+
+func intersectionOfArrays(_ array1: [Int], _ array2: [Int]) -> [Int] {
+
+    let resSet = Set<Int>(array1).intersection(array2)
+    
+    return Array<Int>(resSet)
+}
+
+let array1 = [1,2,3,4,5,5,6]
+let array2 = [1,5,5,6]
+
+intersectionOfArrays(array1, array2)
+
+/*:
+ ## Intersection of Two Arrays II
+ Given two arrays, write a function to compute their intersection.
+ Example: Given nums1 = [1, 2, 2, 1], nums2 = [2, 2], return [2, 2].
+ 
+ Use Set is not good in here. Sort two arrays. Iterate to find all common items.
+ */
+
+func intersectionOfArraysII(_ array1: [Int], _ array2: [Int]) -> [Int] {
+    
+    let sorted1 = array1.sorted {$0 < $1}
+    let sorted2 = array2.sorted {$0 < $1}
+    
+    var i = 0, j = 0
+    var res = [Int]()
+    
+    while i < sorted1.count && j < sorted2.count {
+        
+        if sorted1[i] == sorted2[j] {
+            res.append(sorted1[i])
+            i += 1
+            j += 1
+        } else if sorted1[i] < sorted2[j] {
+            i += 1
+        } else {
+            j += 1
+        }
+    }
+    
+    return res
+}
+
+intersectionOfArraysII(array1, array2)
+
+
 
 
