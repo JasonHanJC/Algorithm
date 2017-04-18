@@ -607,7 +607,7 @@ func summaryRanges(_ nums: [Int]) -> [String] {
     if nums.last == startNum {
         res.append("\(startNum)")
     } else {
-        res.append("\(startNum)->\(nums.last)")
+        res.append("\(startNum)->\(nums.last!)")
     }
     
     return res
@@ -616,8 +616,35 @@ func summaryRanges(_ nums: [Int]) -> [String] {
 summaryRanges([0,1,2,4,5,7])
 
 /*:
- ## 
+ ## Merge Sorted Array
+ Given two sorted integer arrays A and B, merge B into A as one sorted array.
+ Note: You may assume that A has enough space to hold additional elements from B. The number of elements initialized in A and B are m and n respectively.
+
+ The idea is starting comparing from the tail, and place the res backward
  */
+
+func mergeSortedArray(_ nums1: inout [Int], _ m: Int, _ nums2: [Int], _ n: Int) {
+    
+    var i = m - 1
+    var j = n - 1
+    
+    while i >= 0 && j >= 0 {
+        if nums1[i] > nums2[j] {
+            nums1[i + j + 1] = nums1[i]
+            i -= 1
+        } else {
+            nums1[i + j + 1] = nums2[j]
+            j -= 1
+        }
+    }
+    
+    // if i >= 0, we don't have to do anything
+    // only take care about nums2 is not empty
+    while j >= 0 {
+        nums1[j] = nums2[j]
+        j -= 1
+    }
+}
 
 
 
