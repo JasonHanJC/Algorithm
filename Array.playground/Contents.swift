@@ -684,6 +684,51 @@ func shortestWordDistance(_ words: [String], _ word1: String, _ word2: String) -
 
 shortestWordDistance(["practice", "makes", "perfect", "coding", "makes"], "coding", "practice")
 
+/*:
+ ##Shortest Word Distance III
+ This is a follow-up problem of Shortest Word Distance. The only difference is now word1 could be the same as word2.
+ Given a list of words and two words word1 and word2, return the shortest distance between these two words in the list.
+ word1 and word2 may be the same and they represent two individual words in the list.
+ For example, Assume that words = ["practice", "makes", "perfect", "coding", "makes"].
+ Given word1 = “makes”, word2 = “coding”, return 1. Given word1 = "makes", word2 = "makes", return 3.
+ 
+ Iterate and update index and distance when encounter word1 or word2, use
+ *			     a temp variable to memorize the previous postion if word1 == word2
+ */
+
+func shortestWordDistanceIII(_ words: [String], _ word1: String, _ word2: String) -> Int {
+    
+    var m = -1
+    var n = -1
+    
+    var distance = Int.max
+    
+    for (index, word) in words.enumerated() {
+        
+        let prev = m
+        
+        if word == word1 {
+            m = index
+        }
+        
+        if word == word2 {
+            n = index
+        }
+        
+        if m != -1 && n != -1 {
+            // word1 == word2
+            if word1 == word2 && prev != -1 && prev != m {
+                distance = min(distance, abs(m - prev))
+            }
+            // word1 != word2
+            else if m != n {
+                distance = min(distance, abs(m - n))
+            }
+        }
+    }
+    
+    return distance
+}
 
 
 
