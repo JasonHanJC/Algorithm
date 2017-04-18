@@ -647,6 +647,42 @@ func mergeSortedArray(_ nums1: inout [Int], _ m: Int, _ nums2: [Int], _ n: Int) 
 }
 
 
+/*: 
+ ##Shortest Word Distance
+ Given a list of words and two words word1 and word2, return the shortest distance between these two words in the list.
+ For example, Assume that words = ["practice", "makes", "perfect", "coding", "makes"].
+ Given word1 = “coding”, word2 = “practice”, return 3. Given word1 = "makes", word2 = "coding", return 1.
+ 
+ Idea: Iterate and update index and distance when encounter word1 or word2
+ */
+
+func shortestWordDistance(_ words: [String], _ word1: String, _ word2: String) -> Int {
+    
+    var m = -1
+    var n = -1
+    
+    var minDis = Int.max
+    
+    for i in 0...words.count - 1 {
+        if words[i] == word1 {
+            
+            m = i
+            if n != -1 {
+                minDis = min(minDis, abs(m - n))
+            }
+            
+        } else if words[i] == word2 {
+            n = i
+            if m != -1 {
+                minDis = min(minDis, abs(m - n))
+            }
+        }
+    }
+    
+    return minDis
+}
+
+shortestWordDistance(["practice", "makes", "perfect", "coding", "makes"], "coding", "practice")
 
 
 
