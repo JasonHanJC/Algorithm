@@ -571,9 +571,53 @@ func trappingRainWater(_ barHeight: [Int]) -> Int {
 
 trappingRainWater([0,1,0,2,1,0,1,3,2,1,2,1])
 
+/*:
+ ##Summary Ranges
+ Given a sorted integer array without duplicates, return the summary of its ranges for consecutive numbers.
+ For example, given [0,1,2,4,5,7], return ["0->2","4->5","7"].
+ 
+ Idea: brute force
+ */
 
+func summaryRanges(_ nums: [Int]) -> [String] {
+    
+    var res = [String]()
+    
+    if nums.count == 0 {
+        return res
+    } else if nums.count == 1 {
+        res.append("\(nums[0])")
+        return res
+    }
+    
+    var startNum = nums[0]
+    
+    for i in 1...nums.count - 1 {
+        if nums[i] - nums[i - 1] > 1 {
+            let endNum = nums[i - 1]
+            if endNum == startNum {
+                res.append("\(startNum)")
+            } else {
+                res.append("\(startNum)->\(endNum)")
+            }
+            startNum = nums[i]
+        }
+    }
+    
+    if nums.last == startNum {
+        res.append("\(startNum)")
+    } else {
+        res.append("\(startNum)->\(nums.last)")
+    }
+    
+    return res
+}
 
+summaryRanges([0,1,2,4,5,7])
 
+/*:
+ ## 
+ */
 
 
 
