@@ -185,4 +185,67 @@ func findMinInRotatedSortedArrayII(_ nums:[Int]) -> Int {
 findMinInRotatedSortedArrayII([6,7,1,2,3,4,6,6,6])
 
 
+/*:
+ ##Search for a Range
+ Given a sorted array of integers, find the starting and ending position of a given target value. Your algorithm’s runtime complexity must be in the order of O(log n). If the target is not found in the array, return [-1, -1]. For example, given [5, 7, 7, 8, 8, 10] and target value 8, return [3, 4].
+ 
+ Use binary search to get the left index and then the right index
+ */
+
+func searchRange(_ nums: [Int], _ target: Int) -> [Int] {
+    
+    var res = [-1, -1]
+    
+    if nums.count == 0 {
+        return res
+    }
+    
+    // find left
+    res[0] = findIndex(nums, target, true)
+    // find right
+    res[1] = findIndex(nums, target, false)
+    
+    return res
+}
+
+func findIndex(_ nums: [Int], _ target: Int, _ isLeft: Bool) -> Int {
+    
+    var i = 0
+    var j = nums.count - 1
+    
+    while i <= j {
+        
+        let mid = (i + j) / 2
+        
+        if nums[mid] == target {
+            // for [1] case
+            if i == j {
+                return i
+            }
+            
+            if isLeft {
+                j = mid
+            } else {
+                if i + 1 == j {
+                    if nums[i] == nums[j] {
+                        return j
+                    } else {
+                        return i
+                    }
+                }
+                i = mid
+            }
+        } else if nums[mid] > target {
+            j = mid - 1
+        } else {
+            i = mid + 1
+        }
+    }
+    
+    return -1
+}
+
+searchRange([1], 1)
+
+
 
