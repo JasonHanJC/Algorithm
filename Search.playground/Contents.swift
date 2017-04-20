@@ -58,7 +58,7 @@ func findKth(_ nums1: [Int], _ nums2: [Int], _ k: Int) -> Double {
 }
 
 
-findMedianSortedArrays([1, 9, 12, 15, 26, 38], [2, 13, 17, 30, 45, 55, 56, 57, 78])
+//findMedianSortedArrays([1, 9, 12, 15, 26, 38], [2, 13, 17, 30, 45, 55, 56, 57, 78])
 
 
 /*:
@@ -99,7 +99,7 @@ func searchInsertPosition(_ nums: [Int], _ target: Int) -> Int {
     return i
 }
 
-searchInsertPosition([1,3,5,6], 0)
+//searchInsertPosition([1,3,5,6], 0)
 
 /*:
  ##Find Minimum in Rotated Sorted Array
@@ -139,7 +139,7 @@ func findMinInRotatedSortedArray(_ nums:[Int]) -> Int {
     return -1
 }
 
-findMinInRotatedSortedArray([6,7,1,2,3,4])
+//findMinInRotatedSortedArray([6,7,1,2,3,4])
 
 
 /*:
@@ -182,7 +182,7 @@ func findMinInRotatedSortedArrayII(_ nums:[Int]) -> Int {
     return -1
 }
 
-findMinInRotatedSortedArrayII([6,7,1,2,3,4,6,6,6])
+//findMinInRotatedSortedArrayII([6,7,1,2,3,4,6,6,6])
 
 
 /*:
@@ -245,7 +245,177 @@ func findIndex(_ nums: [Int], _ target: Int, _ isLeft: Bool) -> Int {
     return -1
 }
 
-searchRange([1], 1)
+//searchRange([1], 1)
+
+
+/*: 
+ ## Search in Rotated Sorted Array
+ Suppose a sorted array is rotated at some pivot unknown to you beforehand. (i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+ You are given a target value to search. If found in the array return its index, other- wise return -1. You may assume no duplicate exists in the array.
+ 
+ Idea: Understand rotared array: 
+ The regular array: [0 1 2 4 5 6 7]
+ There are three cases when rotate the array
+ Case 1: [6 7 0 1 2 4 5], the mid is 1, 1 < 6, nums[left...mid - 1] is not sorted, nums[mid + 1...right] is sorted
+ Case 2: [2 4 5 6 7 0 1], the mid is 6, 2 < 6, nums[left...mid - 1] is sorted, but nums[mid + 1...right] is not sorted
+ Case 3: [5 6 7 0 1 2 4], the mid is 0, nums[left...mid - 1] and nums[mid + 1...right] are both sorted.
+ 
+ So, there is always one part of the array is sorted. So we can check whether target is in the part which is sorted, otherwise the target is the another part which could be sorted or not.
+ 
+ The case:
+ 
+ if nums[mid] == target, return mid
+ 
+ if nums[mid] > nums[left] (case 1, right part is always sorted)
+    if nums[mid] < target <= nums[right] (in the right part)
+        left = mid + 1
+    else 
+        right = mid - 1
+ 
+ else (case 2, left part is always sorted)
+    if nums[left] <= target < nums[mid] (in the left part)
+        right = mid - 1
+    else 
+        left = mid + 1
+ 
+ */
+
+func searchInRotatedSortedArray(_ nums: [Int], _ target: Int) -> Int {
+    
+    if nums.count == 0 {
+        return -1
+    }
+    
+    var i = 0
+    var j = nums.count - 1
+    
+    while i <= j {
+        
+        let mid = (i + j) / 2
+        
+        if nums[mid] == target {
+            return mid
+        }
+        
+        if nums[mid] < nums[i] {
+            
+            if nums[mid] < target && nums[j] >= target {
+                i = mid + 1
+            } else {
+                j = mid - 1
+            }
+        } else {
+            
+            if nums[mid] > target && nums[i] <= target {
+                j = mid - 1
+            } else {
+                i = mid + 1
+            }
+        }
+    }
+    
+    return -1
+}
+
+//searchInRotatedSortedArray([6,7,1,2,3,4,5], 4)
+
+/*:
+ ## Search in Rotated Sorted Array II
+ Follow up for "Search in Rotated Sorted Array": what if duplicates are allowed? Write
+ a function to determine if a given target is in the array.
+ 
+ Compare to the last question. There is a new case: if nums[mid] == muns[left].
+ 
+ example: [3 3 3 1 2 3]
+          [3 3 3 3 1 2]
+ 
+          [3 1 2 3 3 3 3]
+          [3 3 3 3 1 2 3]
+ when nums[mid] == muns[left], we can't the left and right part are both hard to said it is sorted. we need to skip the duplicate. 
+
+ if nums[mid] == muns[left]
+    left += 1
+ 
+ worst case, [3 3 3 3 3 3], target = 1, the complex become O(n)
+ */
+
+func searchInRotatedSortedArrayII(_ nums: [Int], _ target: Int) -> Int {
+
+    if nums.count == 0 {
+        return -1
+    }
+    
+    var i = 0
+    var j = nums.count - 1
+    
+    while i <= j {
+        
+        let mid = (i + j) / 2
+        
+        if nums[mid] == target {
+            return mid
+        }
+        
+        if nums[mid] < nums[i] {
+            
+            if nums[mid] < target && nums[j] >= target {
+                i = mid + 1
+            } else {
+                j = mid - 1
+            }
+        } else if nums[mid] > nums[i] {
+            
+            if nums[mid] > target && nums[i] <= target {
+                j = mid - 1
+            } else {
+                i = mid + 1
+            }
+        } else {
+            i += 1
+        }
+    }
+    
+    return -1
+}
+
+searchInRotatedSortedArrayII([1,3,1,1,1], 3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
