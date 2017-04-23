@@ -53,4 +53,89 @@ func oneEditDistance(s: String, t: String) -> Bool {
     return true
 }
 
-oneEditDistance(s: "kiten", t: "kitten")
+//oneEditDistance(s: "kiten", t: "kitten")
+
+/*:
+ ## Valid Parentheses
+ 
+ Given a string containing just the characters ’(’, ’)’, ’{’, ’}’, ’[’ and ’]’, determine if the input string is valid. The brackets must close in the correct order, "()" and "()[]" are all valid but "(]" and "([)]" are not.
+ 
+ Idea: using stack to store the characters
+ if stack is empty, push one character in.
+ if current character and the top character in the stack are not paired, push current character in.
+ else pop out the top character in the stack
+ 
+ At last, if the stack is not empty, return false, else return true.
+ 
+ In swift, using array as stack
+ */
+
+func validParentheses(_ s: String) -> Bool {
+    
+    let chars = Array(s.characters)
+    
+    if chars.count == 0 {
+        return true
+    }
+    
+    var dic = [Character : Character]()
+    dic["("] = ")"
+    dic["{"] = "}"
+    dic["["] = "]"
+    
+    var stack = Array<Character>()
+    
+    for (_, char) in chars.enumerated() {
+        
+        if stack.isEmpty {
+            stack.append(char)
+        } else {
+            if dic[stack.last!] == char {
+                stack.removeLast()
+            } else {
+                stack.append(char)
+            }
+        }
+    }
+    
+    return stack.isEmpty
+}
+
+//validParentheses("[][[]]([])[[")
+
+/*:
+ ##Longest Valid Parentheses
+ Given a string containing just the characters ’(’ and ’)’, find the length of the longest valid (well-formed) parentheses substring.
+ For "(()", the longest valid parentheses substring is "()", which has length = 2. Another example is ")()())", where the longest valid parentheses substring is "()()", which has length = 4.
+
+ Similar to valid Parentheses, but instead of push char into stack, now we push char's index. Update max length when meet ")"
+ */
+
+func longestValidParentheses(_ s: String) -> Int {
+    
+    let chars = Array(s.characters)
+    
+    if chars.count == 0 || chars.count == 1 {
+        return 0
+    }
+    
+    var res = 0
+    var stack = [Int]()
+    
+    for (index , char) in chars.enumerated() {
+        
+        if char == "(" || stack.isEmpty || chars[stack.last!] == ")" {
+            stack.append(index)
+        } else {
+            let _ = stack.removeLast()
+            if stack.isEmpty {
+                res = max(res, index + 1)
+            } else {
+                res = max(res, index - stack.last!)
+            }
+        }
+    }
+    return res
+}
+
+longestValidParentheses("()(())")
