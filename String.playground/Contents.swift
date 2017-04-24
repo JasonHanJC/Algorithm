@@ -138,4 +138,177 @@ func longestValidParentheses(_ s: String) -> Int {
     return res
 }
 
-longestValidParentheses("()(())")
+//longestValidParentheses("()(())")
+
+/*:
+ ## Valid Palindrome
+ Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
+ For example, "Red rum, sir, is murder" is a palindrome, while "Programcreek is awesome" is not.
+ Note: Have you consider that the string might be empty? This is a good question to ask during an interview.
+ For the purpose of this problem, we define empty string as valid palindrome.
+
+ lower case?
+ space removes
+ special character
+ number and characters
+ 
+ Idea: two pointers, one left, one right
+ */
+
+func validPalindrome(_ s: String) -> Bool {
+    
+    if s.isEmpty {
+        return true
+    }
+    
+    let chars = Array(s.lowercased().characters)
+    
+    var l = 0
+    var r = chars.count - 1
+    
+    while l < r {
+        
+        while l < r && !isAlpha(chars[l]) {
+            l += 1
+        }
+        
+        while l < r && !isAlpha(chars[r]) {
+            r -= 1
+        }
+        
+        if chars[l] == chars[r] {
+            l += 1
+            r -= 1
+        } else {
+            return false
+        }
+    }
+    
+    return true
+}
+
+func isAlpha(_ c: Character) -> Bool {
+    guard let uChar = String(c).unicodeScalars.first else {
+        fatalError("character is invalid")
+    }
+    
+    return CharacterSet.alphanumerics.contains(uChar)
+}
+
+//validPalindrome("Red rum, sir, is murder")
+
+/*:
+ ## Add Strings
+ Given two non-negative integers num1 and num2 represented as string, return the sum of num1 and num2.
+ 
+ Note:
+ The length of both num1 and num2 is < 5100.
+ Both num1 and num2 contains only digits 0-9.
+ Both num1 and num2 does not contain any leading zero.
+ You must not use any built-in BigInteger library or convert the inputs to integer directly.
+ 
+ Idea: add them using sum and carry
+ Note: remeber to check carry at last
+ */
+
+func addStrings(_ num1: String, _ num2: String) -> String {
+    
+    let num1 = Array(num1.characters)
+    let num2 = Array(num2.characters)
+    
+    var res = ""
+    var i = num1.count - 1, j = num2.count - 1, sum = 0, carry = 0
+    
+    while i >= 0 || j >= 0 {
+        sum = carry // sum = 0 , sum += carry
+        
+        if i >= 0 {
+            sum += Int(String(num1[i]))!
+            i -= 1
+        }
+        
+        if j >= 0 {
+            sum += Int(String(num2[j]))!
+            j -= 1
+        }
+        
+        carry = sum / 10
+
+        res.append(String(sum % 10))
+    }
+    
+    if carry != 0 {
+        res.append(String(carry))
+    }
+    
+    // don't forget to reverse the string
+    return String(res.characters.reversed())
+}
+
+//addStrings("9", "1")
+
+
+/*:
+ ## Count and Say
+ 
+ The count-and-say sequence is the sequence of integers beginning as follows:
+ 1, 11, 21, 1211, 111221, ...
+ 
+ 1 is read off as "one 1" or 11.
+ 11 is read off as "two 1s" or 21.
+ 21 is read off as "one 2, then one 1" or 1211.
+ Given an integer n, generate the nth sequence.
+ 
+ Note: The sequence of integers will be represented as a string.
+ */
+
+func countAndSay(_ n: Int) -> String {
+    
+    guard n > 0 else {
+        return ""
+    }
+    
+    var res = "1"
+    var temp: String
+    var count: Int
+    var chars: [Character]
+    var current: Character
+    
+    for _ in 1..<n {
+        temp = ""
+        count = 1
+        chars = Array(res.characters)
+        current = chars[0]
+        
+        for i in 1..<chars.count {
+            if current == chars[i] {
+                count += 1
+            } else {
+                temp.append(String(count))
+                temp.append(current)
+                count = 1
+                current = chars[i]
+            }
+        }
+        
+        temp.append(String(count))
+        temp.append(current)
+        
+        res = temp
+    }
+    
+    return res
+}
+
+countAndSay(4)
+
+
+
+
+
+
+
+
+
+
+
