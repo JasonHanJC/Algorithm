@@ -302,11 +302,127 @@ func countAndSay(_ n: Int) -> String {
 
 countAndSay(4)
 
+/*
+ ## Detect Capital
+ Given a word, you need to judge whether the usage of capitals in it is right or not.
+ 
+ We define the usage of capitals in a word to be right when one of the following cases holds:
+ 
+ All letters in this word are capitals, like "USA".
+ All letters in this word are not capitals, like "leetcode".
+ Only the first letter in this word is capital if it has more than one letter, like "Google".
+ Otherwise, we define that this word doesn't use capitals in a right way.
+ 
+ Two idea: 
+ First one, count the number of capitals, finally, return true or false based on rules:
+    1. all non capitals, return true (numberOfCapital == 0)
+    2. only first letter is capital, return true ((isFirstCharCapital && numberOfCapital == 1))
+    3. all capitals, return true (numberOfCapital == chars.count)
+ 
+ Second one, count the number of capitals, but check the following cases everytime:
+    1. when meets a upper case letter, number of capitals should equal to the index + 1, otherwise return false
+    2. when meets a lower case letter, number of capitals should not greater than 1, otherwise return false
+    3. otherwise return true
 
+ */
 
+func detectCapitalUseS1(_ word: String) -> Bool {
+    var numberOfCapital = 0
+    var isFirstCharCapital = false
+    
+    let chars = Array(word.characters)
+    
+    for (index, char) in chars.enumerated() {
+        
+        if char.isUpperCased() {
+            numberOfCapital += 1
+            
+            if index == 0 {
+                isFirstCharCapital = true
+            } else {
+                
+                // speed improve
+                if !isFirstCharCapital {
+                    return false
+                }
+            }
+        } else {
+            
+            // speed improve
+            if numberOfCapital > 1 {
+                return false
+            }
+        }
+    }
+    
+    return numberOfCapital == 0 || (isFirstCharCapital && numberOfCapital == 1) || numberOfCapital == chars.count
+}
 
+fileprivate extension Character {
+    func isUpperCased() -> Bool {
+        return String(self).uppercased() == String(self)
+    }
+}
 
+//detectCapitalUseS1("USA")
 
+func detectCapitalUseS2(_ word: String) -> Bool {
+    var numberOfCapital = 0
+    
+    let chars = Array(word.characters)
+    
+    for (index, char) in chars.enumerated() {
+        
+        if char.isUpperCased() {
+            numberOfCapital += 1
+            
+            if numberOfCapital != index + 1 {
+                return false
+            }
+        } else {
+            
+            if numberOfCapital > 1 {
+                return false
+            }
+        }
+    }
+    
+    return true
+}
+
+/*:
+ ## First Unique Character in a String
+ Given a string, find the first non-repeating character in it and return it's index. If it doesn't exist, return -1.
+ 
+ Iterate the string twice, first time check the repeating for every character, second time find the first non-repeating index
+ */
+
+func firstUniqChar(_ s: String) -> Int {
+    
+    let chars = Array(s.characters)
+    
+    // dictionary: key is the char, value is true for dupplicate, false for not duplicate
+    var dic = [Character : Bool]()
+    
+    for i in 0...chars.count - 1 {
+        // if char is already in the dic
+        if let _ = dic[chars[i]] {
+            dic[chars[i]] = true
+        } else {
+            dic[chars[i]] = false
+        }
+    }
+    
+    
+    for (index, char) in chars.enumerated() {
+        
+        if !dic[char]! {
+            return index
+        }
+    }
+    
+    return -1
+}
 
 
 
