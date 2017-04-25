@@ -607,8 +607,127 @@ func groupAnagrams(_ strs: [String]) -> [[String]] {
 
 groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"])
 
+/*:
+ ## Isomorphic Strings
+ Given two strings s and t, determine if they are isomorphic.
+ 
+ Two strings are isomorphic if the characters in s can be replaced to get t.
+ 
+ Important: All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character but a character may map to itself.
+ 
+ For example,
+ Given "egg", "add", return true.
+ 
+ Given "foo", "bar", return false.
+ 
+ Given "paper", "title", return true.
+ 
+ Note:
+ You may assume both s and t have the same length.
+ 
+ Idea: use dic to store the char and its replaced char. Replace the first string one char at a time, finally compare two string
+ */
+
+func isIsomorphic(_ s: String, _ t: String) -> Bool {
+    
+    var s = Array(s.characters)
+    let t = Array(t.characters)
+    
+    if s.count != t.count {
+        return false
+    }
+    
+    var dic = [Character : Character]()
+    
+    for i in 0..<s.count {
+        
+        if let replaceChar = dic[s[i]] {
+            s[i] = replaceChar
+        } else {
+            
+            // since no two characters map to the same character
+            // if we found a value is already in the dic, return false
+            if dic.values.contains(t[i]) {
+                return false
+            }
+            
+            dic[s[i]] = t[i]
+            s[i] = t[i]
+        }
+    }
+    
+    return s == t
+}
+
+//isIsomorphic("ab", "aa")
 
 
+/*:
+ ## Length of Last Word
+ 
+ Given a string s consists of upper/lower-case alphabets and empty space characters ' ', return the length of last word in the string.
+ 
+ If the last word does not exist, return 0.
+ 
+ Idea 1: seperate the words by space, then get last word's length
+ Idea 2: get the chars, check backword
+ */
+
+func lengthOfLastWord(_ s: String) -> Int {
+    var arr = s.components(separatedBy: " ")
+    var newArr = [String]()
+    
+    for i in 0..<arr.count {
+        if arr[i] != "" {
+            newArr.append(arr[i])
+        }
+    }
+    
+    return newArr.last?.characters.count ?? 0
+}
+
+// if the word contain non alphabet, return false
+func containsOnlyLetters(input: String) -> Bool {
+    for chr in input.characters {
+        if (!(chr >= "a" && chr <= "z") && !(chr >= "A" && chr <= "Z") ) {
+            return false
+        }
+    }
+    return true
+}
+
+//lengthOfLastWord("  aa vfvsdv vsfv")
+
+/*:
+ ## Longest Common Prefix
+ Write a function to find the longest common prefix string amongst an array of strings.
+ 
+ Idea: sort the string array, then compare the first one and the last one
+ */
+
+func longestCommonPrefix(_ strs: [String]) -> String {
+    
+    if strs.count < 2 {
+        return strs.first ?? ""
+    }
+    
+    let sorted = strs.sorted()
+    let first = Array(sorted[0].characters), last = Array(sorted[sorted.count - 1].characters)
+    
+    var res = ""
+    
+    for i in 0..<first.count {
+        
+        if first[i] != last[i] {
+            break
+        }
+        
+        res.append(first[i])
+    }
+    
+    return res
+}
+ 
 
 
 
