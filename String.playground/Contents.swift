@@ -501,3 +501,114 @@ func flipGame(_ s: String) -> [String] {
 }
 
 //flipGame("")
+
+
+/*: 
+ ## Valid Anagram
+ Given two strings s and t, write a function to determine if t is an anagram of s.
+ 
+ For example,
+ s = "anagram", t = "nagaram", return true.
+ s = "rat", t = "car", return false.
+ 
+ Note:
+ You may assume the string contains only lowercase alphabets.
+ 
+ Follow up:
+ What if the inputs contain unicode characters? How would you adapt your solution to such case?
+ 
+ Sanity: if s1.count != s2.count, return false
+ 
+ Idea 1: sort s1 and s2, then chack whether they are equaled, O(nlogn) O(1)
+ Idea 2: use dictionary to store the char and its count O(n) O(n)
+ */
+
+func validAnagram(_ s1: String, _ s2: String) -> Bool {
+    
+    let s1 = Array(s1.characters)
+    let s2 = Array(s2.characters)
+    
+    if s1.count != s2.count {
+        return false
+    }
+    
+    var dic = [Character : Int]()
+    
+    for i in 0..<s1.count {
+        if let num = dic[s1[i]] {
+            dic[s1[i]] = num + 1
+        } else {
+            dic[s1[i]] = 1
+        }
+    }
+    
+    for i in 0..<s2.count {
+        
+        if var num = dic[s2[i]] {
+            num -= 1
+            if num < 0 {
+                return false
+            }
+            dic[s2[i]] = num
+        } else {
+            return false
+        }
+    }
+    
+    return true
+}
+
+validAnagram("affffef", "affefff")
+
+/*:
+ ## Group Anagrams
+ Given an array of strings, group anagrams together.
+ 
+ For example, given: ["eat", "tea", "tan", "ate", "nat", "bat"],
+ Return:
+ 
+ [
+ ["ate", "eat","tea"],
+ ["nat","tan"],
+ ["bat"]
+ ]
+ 
+ */
+
+func groupAnagrams(_ strs: [String]) -> [[String]] {
+    
+    var res = [[String]]()
+    
+    if strs.count == 0 {
+        return res
+    }
+    
+    var dic = [String: [String]]()
+    
+    for i in 0..<strs.count {
+        
+        let sorted = String(strs[i].characters.sorted())
+        
+        var temp = [String]()
+        
+        if let list = dic[sorted] {
+            temp = list
+        }
+        
+        temp.append(strs[i])
+        dic[sorted] = temp
+    }
+    
+    res = dic.values.map{ list in list.sorted() }
+    
+    return res
+    
+}
+
+groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"])
+
+
+
+
+
+
