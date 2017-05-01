@@ -728,6 +728,121 @@ func longestCommonPrefix(_ strs: [String]) -> String {
     return res
 }
  
+/*:
+ ## Reverse String II
+ Given a string and an integer k, you need to reverse the first k characters for every 2k characters counting from the start of the string. If there are less than k characters left, reverse all of them. If there are less than 2k but greater than or equal to k characters, then reverse the first k characters and left the other as original.
+ Example:
+ Input: s = "abcdefg", k = 2
+ Output: "bacdfeg"
+ Restrictions:
+ The string consists of lower English letters only.
+ Length of the given string and k will in the range [1, 10000]
+
+ Idea: use two pointers s and t, s points to the start of the needed reversed chars, t points the tail if the needed reversed chars. s < chars.count and t < chars.count + k
+ */
+
+func reverseStringII(_ s: String, _ k: Int) -> String {
+    
+    var chars = Array(s.characters)
+    
+    if k < 2 { return s }
+    var head = 0, tail = k - 1
+    
+    while head < tail && head < chars.count && tail < chars.count + k {
+        
+        tail = tail > chars.count - 1 ? (chars.count - 1) : tail
+        
+        let rev = chars[head...tail].reversed()
+        
+        chars.replaceSubrange(head...tail, with: rev)
+        
+        head += 2 * k
+        tail += 2 * k
+    }
+    
+    return String(chars)
+}
+
+reverseStringII("abcd", 2)
+
+
+/*:
+ ## Longest Substring Without Repeating Characters
+ Given a string, find the length of the longest substring without repeating characters.
+ 
+ Examples:
+ 
+ Given "abcabcbb", the answer is "abc", which the length is 3.
+ 
+ Given "bbbbb", the answer is "b", with the length of 1.
+ 
+ Given "pwwkew", the answer is "wke", with the length of 3. Note that the answer must be a substring, "pwke" is a subsequence and not a substring.
+ 
+
+ Idea: Iterate the stirng, keep tracking the start index, and store or update every character's index with a dictionary. When you find a duplicate charater in the dic, update the res and the start index. The start index should be the charater's previous index + 1.
+ */
+
+func LongestSubstringWithoutRepeatingCharacters(_ s: String) -> Int {
+    
+    let chars = Array(s.characters)
+    
+    guard chars.count > 1 else {
+        return chars.count
+    }
+    
+    // store the character and its latest index
+    var dic = [Character: Int]()
+    var res = 0
+    var i = 0
+    var start = 0
+    
+    while i < chars.count {
+        
+        if let prevIndex = dic[chars[i]] {
+            
+            res = max(res, i - start)
+            
+            // important
+            if start <= prevIndex {
+                start = prevIndex + 1
+            }
+        }
+        
+        dic[chars[i]] = i
+        i += 1
+    }
+    
+    res = max(res, i - start)
+    
+    return res
+}
+
+//LongestSubstringWithoutRepeatingCharacters("abba")
+
+
+/*:
+ ## Longest Palindromic Substring
+ Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
+ 
+ Example:
+ 
+ Input: "babad"
+ 
+ Output: "bab"
+ 
+ Note: "aba" is also a valid answer.
+ Example:
+ 
+ Input: "cbbd"
+ 
+ Output: "bb"
+ 
+ */
+
+
+
+
+
 
 
 
