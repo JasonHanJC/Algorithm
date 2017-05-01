@@ -747,7 +747,7 @@ func intersectionOfArrays(_ array1: [Int], _ array2: [Int]) -> [Int] {
 let array1 = [1,2,3,4,5,5,6]
 let array2 = [1,5,5,6]
 
-intersectionOfArrays(array1, array2)
+//intersectionOfArrays(array1, array2)
 
 /*:
  ## Intersection of Two Arrays II
@@ -759,8 +759,8 @@ intersectionOfArrays(array1, array2)
 
 func intersectionOfArraysII(_ array1: [Int], _ array2: [Int]) -> [Int] {
     
-    let sorted1 = array1.sorted {$0 < $1}
-    let sorted2 = array2.sorted {$0 < $1}
+    let sorted1 = array1.sorted()
+    let sorted2 = array2.sorted()
     
     var i = 0, j = 0
     var res = [Int]()
@@ -782,6 +782,98 @@ func intersectionOfArraysII(_ array1: [Int], _ array2: [Int]) -> [Int] {
 }
 
 intersectionOfArraysII(array1, array2)
+
+/*:
+ ## Largest Rectangle in Histogram
+ Given n non-negative integers representing the histogram’s bar height where the width
+ of each bar is 1, find the area of largest rectangle in the histogram.
+ 
+ 
+ */
+
+
+/*:
+ ## Contains Duplicate
+ Given an array of integers, find if the array contains any duplicates. Your function should return true if any value appears at least twice in the array, and it should return false if every element is distinct.
+ 
+ Idea: Using a set to check deplicates
+ */
+
+func containsDuplicates(_ nums: [Int]) -> Bool {
+    return nums.count == Set(nums).count
+}
+
+
+/*:
+ ## Contains Duplicate II
+ Given an array of integers and an integer k, find out whether there are two distinct indices i and j in the array such that nums[i] = nums[j] and the absolute difference between i and j is at most k.
+ 
+ use dictionary
+ */
+
+func containsDuplicateII(_ nums: [Int], _ k: Int) -> Bool {
+    
+    if nums.count < 2 || k == 0 {
+        return false
+    }
+    
+    // key is the integer, value is the index
+    var dic = [Int : Int]()
+    
+    for (index, i) in nums.enumerated() {
+        
+        if let preIndex = dic[i], index - preIndex <= k {
+            return true
+        }
+        dic[i] = index
+    }
+    
+    return false
+}
+
+// O(n) Space O(1)
+func containsNearbyDuplicate(_ nums: [Int], _ k: Int) -> Bool {
+    var i = 0, j = 0
+    var k = abs(k)
+    
+    if k == 0 {
+        return false
+    }
+    
+    while j < nums.count && i < nums.count {
+        if i != j && nums[i] == nums[j] {
+            return true
+        }
+        
+        if j - i < k && j < nums.count - 1 {
+            j += 1
+            print("j: \(j)")
+            continue
+        }
+        
+        i += 1
+        print("i: \(i)")
+    }
+    
+    return false
+}
+
+
+containsDuplicateII([1, 2, 3, 4, 5, 6, 3], 3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
