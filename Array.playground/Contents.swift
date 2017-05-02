@@ -808,9 +808,12 @@ func containsDuplicates(_ nums: [Int]) -> Bool {
  ## Contains Duplicate II
  Given an array of integers and an integer k, find out whether there are two distinct indices i and j in the array such that nums[i] = nums[j] and the absolute difference between i and j is at most k.
  
- use dictionary
+ Idea 1: use dictionary to store the each digit's prev index. When a digit appears again, calculate the distance and compare to k.
+ 
+ Idea 2: use two pointer i and j, both start at 0 and not greater than nums.count - 1. The idea is only checking two digits within k distance, so j - i < k.
  */
 
+// O(n) Space O(1)
 func containsDuplicateII(_ nums: [Int], _ k: Int) -> Bool {
     
     if nums.count < 2 || k == 0 {
@@ -832,9 +835,9 @@ func containsDuplicateII(_ nums: [Int], _ k: Int) -> Bool {
 }
 
 // O(n) Space O(1)
-func containsNearbyDuplicate(_ nums: [Int], _ k: Int) -> Bool {
+func containsDuplicateII_2(_ nums: [Int], _ k: Int) -> Bool {
     var i = 0, j = 0
-    var k = abs(k)
+    let k = abs(k)
     
     if k == 0 {
         return false
@@ -847,24 +850,95 @@ func containsNearbyDuplicate(_ nums: [Int], _ k: Int) -> Bool {
         
         if j - i < k && j < nums.count - 1 {
             j += 1
-            print("j: \(j)")
             continue
         }
         
         i += 1
-        print("i: \(i)")
     }
     
     return false
 }
 
 
-containsDuplicateII([1, 2, 3, 4, 5, 6, 3], 3)
+//containsDuplicateII([1, 2, 3, 4, 5, 6, 3], 3)
+
+/*:
+ ##Gas Station
+ There are N gas stations along a circular route, where the amount of gas at station i is gas[i].
+ 
+ You have a car with an unlimited gas tank and it costs cost[i] of gas to travel from station i to its next station (i+1). You begin the journey with an empty tank at one of the gas stations.
+ 
+ Return the starting gas station's index if you can travel around the circuit once, otherwise return -1.
+ 
+ Idea: keep updating the left gas after arriving the next gas station. If left gas < 0, update the starting gas station's index. If the sum of all gas is smaller than sum of all cost, return -1
+ */
+
+func canCompleteCircuit(_ gas: [Int], _ cost: [Int]) -> Int {
+    
+    if gas.count != cost.count {
+         return -1
+    }
+    
+    var leftGas = 0
+    var total = 0
+    var startIndex = 0
+    
+    for (index, curGas) in gas.enumerated() {
+        
+        leftGas += curGas - cost[index]
+        total += curGas - cost[index]
+        
+        if leftGas < 0 {
+            startIndex = index + 1
+            leftGas = 0
+        }
+    }
+    
+    if total < 0 {
+        return -1
+    }
+    return startIndex
+}
 
 
-
-
-
+/*:
+ ## Heaters
+ Winter is coming! Your first job during the contest is to design a standard heater with fixed warm radius to warm all the houses.
+ 
+ Now, you are given positions of houses and heaters on a horizontal line, find out minimum radius of heaters so that all houses could be covered by those heaters.
+ 
+ So, your input will be the positions of houses and heaters seperately, and your expected output will be the minimum radius standard of heaters.
+ 
+ Note:
+ Numbers of houses and heaters you are given are non-negative and will not exceed 25000.
+ Positions of houses and heaters you are given are non-negative and will not exceed 10^9.
+ As long as a house is in the heaters' warm radius range, it can be warmed.
+ All the heaters follow your radius standard and the warm radius will the same.
+ Example 1:
+ Input: [1,2,3],[2]
+ Output: 1
+ Explanation: The only heater was placed in the position 2, and if we use the radius 1 standard, then all the houses can be warmed.
+ Example 2:
+ Input: [1,2,3,4],[1,4]
+ Output: 1
+ Explanation: The two heater was placed in the position 1 and 4. We need to use radius 1 standard, then all the houses can be warmed.
+ 
+ */
+ 
+func findRadius(_ houses: [Int], _ heaters: [Int]) -> Int {
+    var i = 0, radius = 0
+    let houses = houses.sorted(), heaters = heaters.sorted()
+    
+    for house in houses {
+        while i < heaters.count - 1 && abs(heaters[i] - house) >= abs(heaters[i + 1] - house) {
+            i += 1
+        }
+        
+        radius = max(radius, abs(house - heaters[i]))
+    }
+    
+    return radius
+}
 
 
 
