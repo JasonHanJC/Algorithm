@@ -1068,8 +1068,54 @@ func majorityElementII(_ nums: [Int]) -> [Int] {
 majorityElementII([0,-1,2,-1])
 
 
+/*:
+ ## Longest Consecutive Sequence
+ Given an unsorted array of integers, find the length of the longest consecutive elements sequence.
+ 
+ For example,
+ Given [100, 4, 200, 1, 3, 2],
+ The longest consecutive elements sequence is [1, 2, 3, 4]. Return its length: 4.
+ 
+ Your algorithm should run in O(n) complexity.
+ 
+ Idea: use dictionary to keep tracking the sequence and store the length for the boundary points. For example, [1, 2, 3, 4, 5], dic[1] should be 5, and dic[5] should be 5
+ */
 
+func longestConsecutive(_ nums: [Int]) -> Int {
 
+    var longest = 0
+    var dic = [Int : Int]()
+    
+    for num in nums {
+        
+        if let cur = dic[num] {
+            continue
+        } else {
+            
+            let leftLen = dic[num - 1] ?? 0
+            let rightLen = dic[num + 1] ?? 0
+            let total = leftLen + rightLen + 1
+            
+            // update the longest
+            longest = max(longest, total)
+            
+            dic[num] = total
+            
+            // update the boundary length
+            if leftLen != 0 {
+                dic[num - leftLen] = total
+            }
+            
+            if rightLen != 0 {
+                dic[num + rightLen] = total
+            }
+        }
+    }
+    
+    return longest
+}
+
+longestConsecutive([0, 1, 2, 3, 4])
 
 
 
