@@ -969,8 +969,103 @@ func findMaxConsecutiveOnes(_ nums: [Int]) -> Int {
     return maxL
 }
 
+/*:
+ ## Majority Element
+ Given an array of size n, find the majority element. The majority element is the element that appears more than ⌊ n/2 ⌋ times.
+ 
+ You may assume that the array is non-empty and the majority element always exist in the array.
+ 
+ Idea 1: Since nums is not empty, and there will always has one elemnt's count > n/2,
+ then sort the array and the mid one is the result. O(nlogn)
+ 
+ Idea 2: Boyer–Moore majority vote algorithm
+ https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_majority_vote_algorithm
+ Initialize an element m and a counter i with i = 0
+ For each element x of the input sequence:
+ If i = 0, then assign m = x and i = 1
+ else if m = x, then assign i = i + 1
+ else assign i = i − 1
+ Return m
+ */
 
+func majorityElement(_ nums: [Int]) -> Int {
+    
+    var count = 0
+    var res = 0
+    
+    for i in nums {
+        if count == 0 {
+            res = i
+            count += 1
+        } else if i == res {
+            count += 1
+        } else {
+            count -= 1
+        }
+    }
+    
+    return res
+}
 
+/*:
+ ## Majority Element II
+ Given an integer array of size n, find all elements that appear more than ⌊ n/3 ⌋ times. The algorithm should run in linear time and in O(1) space.
+ 
+ Idea: Boyer–Moore majority vote algorithm
+ Since we are finding the elements that appear more than [n/3], there are no more than 2 possible elements.
+ We can change the Boyer–Moore majority vote algorithm that count two elements, note don't forget to check whether the count is correct
+ */
+
+func majorityElementII(_ nums: [Int]) -> [Int] {
+    
+    var count0 = 0, count1 = 0
+    var res0: Int?
+    var res1: Int?
+    
+    var res = [Int]()
+    
+    for num in nums {
+        // note the if sequance
+        if let res0 = res0, num == res0 {
+            count0 += 1
+        } else if let res1 = res1 ,num == res1 {
+            count1 += 1
+        } else if count0 == 0 {
+            res0 = num
+            count0 += 1
+        } else if count1 == 0 {
+            res1 = num
+            count1 += 1
+        } else {
+            count0 -= 1
+            count1 -= 1
+        }
+    }
+    
+    count0 = 0
+    count1 = 0
+    
+    for num in nums {
+        if let res0 = res0, num == res0 {
+            count0 += 1
+        }
+        if let res1 = res1, num == res1 {
+            count1 += 1
+        }
+    }
+    
+    if count0 > nums.count / 3 {
+        res.append(res0!)
+    }
+    
+    if count1 > nums.count / 3 {
+        res.append(res1!)
+    }
+    
+    return res
+}
+
+majorityElementII([0,-1,2,-1])
 
 
 
