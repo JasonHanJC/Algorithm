@@ -1392,4 +1392,49 @@ func productExceptSelf(_ nums: [Int]) -> [Int] {
 
 // productExceptSelf([1,2,3,4])
 
+/*:
+ ## Rotate Array
+ Rotate an array of n elements to the right by k steps.
+ 
+ For example, with n = 7 and k = 3, the array [1,2,3,4,5,6,7] is rotated to [5,6,7,1,2,3,4].
+ 
+ Idea 1: use a extra array A to store the nums[n-k-1...n-1], shift the rest to the right, then put A back to the front.
+ Idea 2: brote force, shift k time
+ Idea 3: step 1, reverse 0...n-1, then reverse 0...k-1, then reverse k...n-1
+ */
 
+func rotateArray(_ nums: inout [Int], _ k: Int) {
+    
+    let n = nums.count
+    let k = k % n
+    
+    reverseArray(&nums, 0, n - 1)
+    reverseArray(&nums, 0, k - 1)
+    reverseArray(&nums, k, n - 1)
+
+}
+
+func reverseArray(_ nums: inout [Int], _ l: Int, _ r: Int) {
+    
+    var l = l
+    var r = r
+    
+    if l >= r || l < 0 || r > nums.count - 1 {
+        return
+    }
+    
+    while l < r {
+        
+        let temp = nums[l]
+        nums[l] = nums[r]
+        nums[r] = temp
+        
+        l += 1
+        r -= 1
+    }
+}
+
+/*: 
+ ##
+ 
+ */
