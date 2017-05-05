@@ -1088,7 +1088,7 @@ func longestConsecutive(_ nums: [Int]) -> Int {
     
     for num in nums {
         
-        if let cur = dic[num] {
+        if dic[num] != nil {
             continue
         } else {
             
@@ -1165,10 +1165,60 @@ func islandPerimeter(_ grid: [[Int]]) -> Int {
     return res
 }
 
-//islandPerimeter([[0,1,0,0],
-                 [1,1,1,0],
-                 [0,1,0,0],
-                 [1,1,0,0]])
+//islandPerimeter([[0,1,0,0],[1,1,1,0],[0,1,0,0],[1,1,0,0]])
+
+/*:
+ ## Maximum Size Subarray Sum Equals k
+ Given an array nums and a target value k, find the maximum length of a subarray that sums to k. If there isn't one, return 0 instead.
+ 
+ Example 1:
+ Given nums = [1, -1, 5, -2, 3], k = 3,
+ return 4. (because the subarray [1, -1, 5, -2] sums to 3 and is the longest)
+ 
+ Example 2:
+ Given nums = [-2, -1, 2, 1], k = 1,
+ return 2. (because the subarray [-1, 2] sums to 1 and is the longest)
+ 
+ Follow Up:
+ Can you do it in O(n) time?
+ 
+ Idea: CumSum. Iterate the array, and use dictionary to store the current sum as key and current index as value.
+ 
+ if current sum == k, update the longest size by max(maxLen, currentIndex + 1)
+ else check whether the dictionary contains [currentSum - k], it means we find a possible sequence in between the array, then update the longest size be max(maxLen, currentIndex - differIndex)
+ for multiple sum, we store the index as left as possible, simply don't update the index in the dictionary
+ 
+ ![MaximumSizeSubarraySumEqualsk](MaximumSizeSubarraySumEqualsk.JPG)
+ 
+ */
+
+func maximumSizeSubarraySumEqualsK(_ nums: [Int], _ k: Int) -> Int {
+    
+    var sum = 0
+    var dic = [Int : Int]()
+    var longest = 0
+    
+    for (i, num) in nums.enumerated() {
+        
+        sum += num
+        
+        if sum == k {
+            longest = max(longest, i + 1)
+        }
+        
+        if let diffIndex = dic[sum - k] {
+            longest = max(longest, i - diffIndex)
+        }
+        
+        if dic[sum] == nil {
+            dic[sum] = i
+        }
+    }
+    
+    return longest
+}
+
+//maximumSizeSubarraySumEqualsK([1], 0)
 
 
 
