@@ -1220,5 +1220,76 @@ func maximumSizeSubarraySumEqualsK(_ nums: [Int], _ k: Int) -> Int {
 
 //maximumSizeSubarraySumEqualsK([1], 0)
 
+/*:
+ ## Next Permutation
+ Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
+ 
+ If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).
+ 
+ The replacement must be in-place, do not allocate extra memory.
+ 
+ Here are some examples. Inputs are in the left-hand column and its corresponding outputs are in the right-hand column.
+ 1,2,3 → 1,3,2
+ 
+ 3,2,1 → 1,2,3
+ 
+ 1,1,5 → 1,5,1
 
+ ![nextPermutation](nextPermutation.JPG)
+ Idea: 
+ 1. starting from right, find the first one which is less than its previous one, store the index i
+ 2. then starting from right again, find the first one which is greater than num at index i, store the index j.
+ 3. swap number at i and j
+ 4. reverse all number from index i + 1 to nums.count - 1
+ 
+ */
 
+func nextPermutation(_ nums: inout [Int]) {
+    
+    if nums.count == 1 || nums.count == 0 {
+        return
+    }
+    
+    var i = nums.count - 1
+    var pre = Int.min
+    // first step
+    while i >= 0 {
+        if nums[i] < pre {
+            break
+        } else {
+            pre = nums[i]
+            i -= 1
+        }
+    }
+    
+    var j = nums.count - 1
+    // second step, note: [3, 2, 1], i will be -1, don't need to swap. Just reverse
+    if i > -1 {
+        while j >= 0 {
+            if nums[j] > nums[i] {
+                break
+            } else {
+                j -= 1
+            }
+        }
+        swap(&nums, i, j)
+    }
+    
+    i += 1
+    j = nums.count - 1
+    
+    while i < j {
+        swap(&nums, i, j)
+        i += 1
+        j -= 1
+    }
+}
+
+func swap<T>(_ nums: inout [T], _ i: Int, _ j: Int) {
+    let tmp = nums[i]
+    nums[i] = nums[j]
+    nums[j] = tmp;
+}
+
+//var nums = [3,2,1]
+//nextPermutation(&nums)
