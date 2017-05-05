@@ -1347,3 +1347,49 @@ func getSqDistance(_ a: [Int], _ b: [Int]) -> Int {
     let dy = a[1] - b[1]
     return dx * dx + dy * dy
 }
+
+/*:
+ ## Product of Array Except Self
+ Given an array of n integers where n > 1, nums, return an array output such that output[i] is equal to the product of all the elements of nums except nums[i].
+ 
+ Solve it without division and in O(n).
+ 
+ For example, given [1,2,3,4], return [24,12,8,6].
+ 
+ 
+ Idea: Since it is the product of Array except self, in other words, it is the product of the left side product and right right product of self.
+ So, we could use two array to store all left product and all right product. Then, compute the res.
+ 
+ We can optimize the algrithm in less space.
+ */
+
+func productExceptSelf(_ nums: [Int]) -> [Int] {
+    
+    var res = [Int]()
+    
+    if nums.count < 2 {
+        return res
+    }
+    
+    // left products
+    // first left product is 1
+    res.append(1)
+    for i in 1...nums.count - 1 {
+        res.append(res[i - 1] * nums[i - 1])
+    }
+    
+    // right products
+    var preRightProduct = 1
+    var i = nums.count - 2
+    while i >= -1 {
+        res[i + 1] *= preRightProduct
+        preRightProduct *= nums[i + 1]
+        i -= 1
+    }
+
+    return res
+}
+
+// productExceptSelf([1,2,3,4])
+
+
