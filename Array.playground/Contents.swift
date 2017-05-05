@@ -1293,3 +1293,57 @@ func swap<T>(_ nums: inout [T], _ i: Int, _ j: Int) {
 
 //var nums = [3,2,1]
 //nextPermutation(&nums)
+
+/*:
+ ## Number of Boomerangs
+ Given n points in the plane that are all pairwise distinct, a "boomerang" is a tuple of points (i, j, k) such that the distance between i and j equals the distance between i and k (the order of the tuple matters).
+ 
+ Find the number of boomerangs. You may assume that n will be at most 500 and coordinates of points are all in the range [-10000, 10000] (inclusive).
+ 
+ Example:
+ Input:
+ [[0,0],[1,0],[2,0]]
+ 
+ Output:
+ 2
+ 
+ Explanation:
+ The two boomerangs are [[1,0],[0,0],[2,0]] and [[1,0],[2,0],[0,0]]
+ 
+ Idea: Since all points are distinct, we can iterate each point, and calculate the distance between other points. Use a dictionary to store the distance as key and number of paired points as value. Then, we calculate the number of permutation for each distance.
+ The permutation fomula is n!/(n − r)!, n is the number of all items, r is number of items you choose.
+ 
+ */
+
+func numberOfBoomerangs(_ points: [[Int]]) -> Int {
+    var num = 0
+    
+    for (i, point) in points.enumerated() {
+        var dict = [Int: Int]()
+        for (j, anotherpoint) in points.enumerated() {
+            if i == j {
+                continue
+            }
+            
+            let distance = getSqDistance(point, anotherpoint)
+            
+            if let sameDistancePoints = dict[distance] {
+                dict[distance] = sameDistancePoints + 1
+            } else {
+                dict[distance] = 1
+            }
+        }
+        
+        for key in dict.keys {
+            // since n choose 2 's permutation, n!/(n - 2)! = n * (n - 1)
+            num += dict[key]! * (dict[key]! - 1)
+        }
+    }
+    return num
+}
+
+func getSqDistance(_ a: [Int], _ b: [Int]) -> Int {
+    let dx = a[0] - b[0]
+    let dy = a[1] - b[1]
+    return dx * dx + dy * dy
+}
