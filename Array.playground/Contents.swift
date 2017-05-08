@@ -1435,6 +1435,35 @@ func reverseArray(_ nums: inout [Int], _ l: Int, _ r: Int) {
 }
 
 /*: 
- ##
+ ## Rotate Image
+ You are given an n x n 2D matrix representing an image.
+ 
+ Rotate the image by 90 degrees (clockwise).
  
  */
+
+func rotateImage(_ matrix: inout [[Int]]) {
+    
+    if matrix.count != matrix[0].count {
+        return
+    }
+    
+    let n = matrix.count
+    let layer = n/2
+    
+    for i in 0..<layer {
+        let start = i, end = n - i - 1
+        for j in start..<end {
+            let temp = matrix[i][j]
+            matrix[i][j] = matrix[n-1-j][i]
+            matrix[n-1-j][i] = matrix[n-i-1][n-1-j]
+            matrix[n-i-1][n-1-j] = matrix[j][n-i-1]
+            matrix[j][n-i-1] = temp
+        }
+    }
+}
+
+var array = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]
+rotateImage(&array)
+
+
