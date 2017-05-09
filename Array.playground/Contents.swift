@@ -1463,7 +1463,73 @@ func rotateImage(_ matrix: inout [[Int]]) {
     }
 }
 
-var array = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]
-rotateImage(&array)
+//var array = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]
+//rotateImage(&array)
+
+/*:
+ ## Set Matrix Zeroes
+ Given a m x n matrix, if an element is 0, set its entire row and column to 0. Do it in place.
+ 
+ Idea: We can use first row and first col to record the rows and cols that should be set as 0s. 
+ Step 1: check whether first row and first col contains 0. Store in the flag
+ Step 2: check the rest of the matrix, if matrix[i][j] == 0, set matrix[0][j] = 0 and matrix[i][j] = 0.
+ step 3: Acording to the first row and first col, set 0s to correct rows and cols
+ step 4: Acording to the flag from step 1, set first row and col to 0s
+ 
+ */
+
+func setZeroes(_ matrix: inout [[Int]]) {
+
+    var firstRowHasZero: Bool = false
+    var firstColHasZero: Bool = false
+    let row = matrix.count, col = matrix[0].count
+    
+    // step 1
+    for i in 0..<col where matrix[0][i] == 0 {
+        firstRowHasZero = true
+        break
+    }
+    
+    for i in 0..<row where matrix[i][0] == 0 {
+        firstColHasZero = true
+        break
+    }
+    
+    // step 2
+    for i in 1..<row {
+        for j in 1..<col {
+            if matrix[i][j] == 0 {
+                matrix[i][0] = 0
+                matrix[0][j] = 0
+            }
+        }
+    }
+    
+    // step 3
+    for i in 1..<row {
+        for j in 1..<col {
+            if matrix[i][0] == 0 || matrix[0][j] == 0 {
+                matrix[i][j] = 0
+            }
+        }
+    }
+    
+    // step 4
+    if firstColHasZero {
+        for i in 0..<row {
+            matrix[i][0] = 0
+        }
+    }
+    
+    if firstRowHasZero {
+        for i in 0..<col {
+            matrix[0][i] = 0
+        }
+    }
+}
+
+//var matrix = [[0,0,0,5],[4,3,1,4],[0,1,1,4],[1,2,1,3],[0,0,1,1]]
+//setZeroes(&matrix)
+
 
 
