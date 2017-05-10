@@ -1532,4 +1532,128 @@ func setZeroes(_ matrix: inout [[Int]]) {
 //setZeroes(&matrix)
 
 
+/*:
+ ## Sliding Window Maximum
+ Given an array nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position.
+ 
+ For example,
+ Given nums = [1,3,-1,-3,5,3,6,7], and k = 3.
+ 
+ Window position                Max
+ ---------------               -----
+ [1  3  -1] -3  5  3  6  7       3
+ 1  [3  -1  -3] 5  3  6  7       3
+ 1   3 [-1  -3  5] 3  6  7       5
+ 1   3  -1 [-3  5  3] 6  7       5
+ 1   3  -1  -3 [5  3  6] 7       6
+ 1   3  -1  -3  5 [3  6  7]      7
+ Therefore, return the max sliding window as [3,3,5,5,6,7].
+
+ You may assume k is always valid, ie: 1 ≤ k ≤ input array's size for non-empty array.
+
+ Idea: Use array to store the potential max number's index. The first item of the array is always the max number's index for a window.
+ 
+ */
+
+func slidingWindowMaximun(_ nums: [Int], _ k: Int) -> [Int] {
+    
+    var indexArray = [Int]()
+    var res = [Int]()
+    
+    for i in 0..<nums.count {
+        // check last item in the indexArray
+        // if nums[last] <= nums[i], remove the last
+        // until nums[last] > nums[i]
+        while let last = indexArray.last, nums[last] <= nums[i] {
+            indexArray.removeLast()
+        }
+        // add current one
+        indexArray.append(i)
+        
+        // check the first in the indexArray
+        // if first == i - k, means first is not in current window now, remove it
+        if let first = indexArray.first, first == i - k {
+            indexArray.removeFirst()
+        }
+        
+        // Add the first one in the indexArray to the res
+        if i >= k - 1 {
+            res.append(nums[indexArray.first!])
+        }
+    }
+    
+    return res
+}
+
+//slidingWindowMaximun([1,3,-1,-3,5,3,6,7], 3)
+
+/*:
+ ## Spiral Matrix
+ Given a matrix of m x n elements (m rows, n columns), return all elements of the matrix in spiral order.
+ 
+ For example,
+ Given the following matrix:
+ 
+ [
+ [ 1, 2, 3 ],
+ [ 4, 5, 6 ],
+ [ 7, 8, 9 ]
+ ]
+ You should return [1,2,3,6,9,8,7,4,5].
+ */
+
+func spiralOrder(_ matrix: [[Int]]) -> [Int] {
+    var res = [Int]()
+    
+    if matrix.count == 0 || matrix[0].count == 0 {
+        return res
+    }
+    
+    let m = matrix.count
+    let n = matrix[0].count
+
+    let layers = (min(m, n) + 1) / 2
+
+    for layer in 0..<layers {
+        let start = layer
+        var endForRow = n - layer - 1, endForCol = m - layer - 1
+        print("start: \(start), endForRow : \(endForRow), endForCol: \(endForCol)")
+        
+        // only one col
+        if start == endForRow {
+            for i in start...endForCol {
+                res.append(matrix[i][start])
+            }
+        }
+        // only one row
+        else if start == endForCol {
+            for i in start...endForRow {
+                res.append(matrix[start][i])
+            }
+        }
+        else {
+            // top
+            for i in start..<endForRow {
+                res.append(matrix[start][i])
+            }
+            // right
+            for i in start..<endForCol {
+                res.append(matrix[i][n - start - 1])
+            }
+            // bottom
+            for i in stride(from: endForRow, to: start, by: -1) {
+                res.append(matrix[m - start - 1][i])
+            }
+            // left
+            for i in stride(from: endForCol, to: start, by: -1) {
+                res.append(matrix[i][start])
+            }
+        }
+    }
+    
+    return res
+}
+
+//spiralOrder([[7],[5], [4]])
+
 
