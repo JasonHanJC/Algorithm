@@ -1616,7 +1616,7 @@ func spiralOrder(_ matrix: [[Int]]) -> [Int] {
 
     for layer in 0..<layers {
         let start = layer
-        var endForRow = n - layer - 1, endForCol = m - layer - 1
+        let endForRow = n - layer - 1, endForCol = m - layer - 1
         print("start: \(start), endForRow : \(endForRow), endForCol: \(endForCol)")
         
         // only one col
@@ -1655,5 +1655,62 @@ func spiralOrder(_ matrix: [[Int]]) -> [Int] {
 }
 
 //spiralOrder([[7],[5], [4]])
+
+/*:
+ ## Spiral Matrix II
+ Given an integer n, generate a square matrix filled with elements from 1 to n2 in spiral order.
+ 
+ For example,
+ Given n = 3,
+ 
+ You should return the following matrix:
+ [
+ [ 1, 2, 3 ],
+ [ 8, 9, 4 ],
+ [ 7, 6, 5 ]
+ ]
+ 
+ */
+
+func generateSpiralMatrix(_ n: Int) -> [[Int]] {
+    
+    var res = Array(repeating: Array(repeating: 0, count: n), count: n)
+    
+    let layers = n/2
+    var val = 1
+    
+    for layer in 0..<layers {
+        let start = layer, end = n - layer - 1
+        
+        // top
+        for i in start..<end {
+            res[start][i] = val
+            val += 1
+        }
+        // right
+        for i in start..<end {
+            res[i][n - start - 1] = val
+            val += 1
+        }
+        // bottom
+        for i in stride(from: end, to: start, by: -1) {
+            res[n - start - 1][i] = val
+            val += 1
+        }
+        // left
+        for i in stride(from: end, to: start, by: -1) {
+            res[i][start] = val
+            val += 1
+        }
+    }
+    
+    if n % 2 != 0 {
+        res[n/2][n/2] = val
+    }
+    
+    return res
+}
+
+//generateSpiralMatrix(4)
 
 
