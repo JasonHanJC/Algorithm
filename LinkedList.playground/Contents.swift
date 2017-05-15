@@ -134,6 +134,8 @@ func mergeKLists(_ lists: [ListNode?]) -> ListNode? {
     var left = 0
     var right = lists.count - 1
     
+    var lists = lists
+    
     while right > 0 {
         left = 0
         while left < right {
