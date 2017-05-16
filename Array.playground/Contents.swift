@@ -1793,3 +1793,61 @@ private func _isValidChar(_ char: Character, _ visited: inout [Bool]) -> Bool {
     
     return true
 }
+
+/*:
+ ## Merge Intervals
+ Given a collection of intervals, merge all overlapping intervals.
+ 
+ For example,
+ Given [1,3],[2,6],[8,10],[15,18],
+ return [1,6],[8,10],[15,18].
+ */
+
+public class Interval {
+    public var start: Int
+    public var end: Int
+    public init(_ start: Int, _ end: Int) {
+        self.start = start
+        self.end = end
+    }
+}
+
+func mergeIntervals(_ intervals: [Interval]) -> [Interval] {
+    
+    guard intervals.count > 0 else {
+        return intervals
+    }
+    
+    // sort the intervals
+    var intervals = intervals.sorted { (i1, i2) -> Bool in
+        if i1.start == i2.start {
+            return i1.end < i2.end
+        } else {
+            return i1.start < i2.start
+        }
+    }
+    
+//    var intervals = intervals.sorted() {
+//        if $0.start == $1.start {
+//            return $0.end < $1.end
+//        } else {
+//            return $0.start < $1.start
+//        }
+//    }
+    
+    var res : [Interval] = [intervals.first!]
+    
+    for i in 1..<intervals.count {
+        let (cur, last) = (intervals[i], res.last!)
+        
+        if cur.start > last.end {
+            res.append(cur)
+        } else {
+            last.end = max(cur.end, last.end)
+        }
+    }
+    
+    return res
+}
+
+
