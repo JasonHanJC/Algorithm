@@ -148,6 +148,44 @@ func mergeKLists(_ lists: [ListNode?]) -> ListNode? {
     return lists[0]
 }
 
+/*:
+ ## Odd Even Linked List
+ Given a singly linked list, group all odd nodes together followed by the even nodes. Please note here we are talking about the node number and not the value in the nodes.
+ 
+ You should try to do it in place. The program should run in O(1) space complexity and O(nodes) time complexity.
+ 
+ Example:
+ Given 1->2->3->4->5->NULL,
+ return 1->3->5->2->4->NULL.
+ 
+ Note:
+ The relative order inside both the even and odd groups should remain as it was in the input.
+ The first node is considered odd, the second node even and so on ...
+ 
+ Idea: use a node to store the odd head and a node to store the even head. Iterate the linked list, link the odd node to the odd head, link the even node to even head. Finaly, link the even head to the odd tail.
+ */
+
+func oddEvenList(_ head: ListNode?) -> ListNode? {
+    
+    if head == nil || head!.next == nil || head!.next!.next == nil {
+        return head
+    }
+    
+    var odd = head
+    let evenHead = head!.next
+    var even = head!.next
+    
+    while even != nil && even!.next != nil {
+        odd!.next = odd!.next!.next
+        even!.next = even!.next!.next
+        
+        odd = odd!.next
+        even = even!.next
+    }
+    odd!.next = evenHead
+    
+    return head;
+}
 
 
 
