@@ -187,5 +187,41 @@ func oddEvenList(_ head: ListNode?) -> ListNode? {
     return head;
 }
 
+/*:
+ ## Palindrome Linked List
+ Given a singly linked list, determine if it is a palindrome.
+ 
+ Follow up:
+ Could you do it in O(n) time and O(1) space?
 
+ Idea: Revise the right half of the list, the campare the left part and right part.
+ */
+
+func isPalindrome(_ head: ListNode?) -> Bool {
+    
+    if head == nil || head!.next == nil {
+        return true
+    }
+    
+    var slow = head, fast = head
+    
+    while fast != nil && fast!.next != nil {
+        slow = slow!.next
+        fast = fast!.next!.next
+    }
+    
+    var revisedRight = reverseList(slow)
+    
+    slow = head
+    
+    while revisedRight != nil && slow != nil {
+        if revisedRight!.val != slow!.val {
+            return false
+        }
+        revisedRight = revisedRight!.next
+        slow = slow!.next
+    }
+    
+    return true
+}
 
