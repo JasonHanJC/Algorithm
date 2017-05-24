@@ -225,3 +225,44 @@ func isPalindrome(_ head: ListNode?) -> Bool {
     return true
 }
 
+/*:
+ ## Partition List
+ Given a linked list and a value x, partition it such that all nodes less than x come before nodes greater than or equal to x.
+ 
+ You should preserve the original relative order of the nodes in each of the two partitions.
+ 
+ For example,
+ Given 1->4->3->2->5->2 and x = 3,
+ return 1->2->2->4->3->5.
+ */
+
+func partition(_ head: ListNode?, _ x: Int) -> ListNode? {
+    
+    if head == nil || head!.next == nil {
+        return head
+    }
+    
+    let smallHead = ListNode(0), greatHead = ListNode(0)
+    var s = smallHead, g = greatHead
+    
+    var head = head
+    
+    while head != nil {
+        if head!.val < x {
+            s.next = head
+            s = s.next!
+        } else {
+            g.next = head
+            g = g.next!
+        }
+        
+        head = head!.next
+    }
+    
+    // Don't forget to set nil to the last node.next
+    g.next = nil
+    s.next = greatHead.next
+    
+    return smallHead.next
+}
+
