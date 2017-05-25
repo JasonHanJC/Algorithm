@@ -266,3 +266,62 @@ func partition(_ head: ListNode?, _ x: Int) -> ListNode? {
     return smallHead.next
 }
 
+/*:
+ ## Remove Duplicates from Sorted List
+ Given a sorted linked list, delete all duplicates such that each element appear only once.
+ 
+ For example,
+ Given 1->1->2, return 1->2.
+ Given 1->1->2->3->3, return 1->2->3.
+ 
+ */
+
+func deleteDuplicates(_ head: ListNode?) -> ListNode? {
+    
+    var node = head
+    
+    while node != nil && node!.next != nil {
+        if node!.val == node!.next!.val {
+            node!.next = node!.next!.next
+        } else {
+            node = node!.next
+        }
+    }
+    
+    return head
+}
+
+/*:
+ ## Remove Duplicates from Sorted List II
+ Given a sorted linked list, delete all duplicates such that each element appear only once.
+ 
+ Given a sorted linked list, delete all nodes that have duplicate numbers, leaving only distinct numbers from the original list.
+ 
+ For example,
+ Given 1->2->3->3->4->4->5, return 1->2->5.
+ Given 1->1->1->2->3, return 2->3.
+ 
+ */
+
+func deleteDuplicatesII(_ head: ListNode?) -> ListNode? {
+    if head == nil || head!.next == nil {
+        return head
+    }
+    
+    let dummyHead = ListNode(0)
+    dummyHead.next = head
+    var d = dummyHead
+    
+    while d.next != nil && d.next!.next != nil {
+        if d.next!.val == d.next!.next!.val {
+            var pre = d.next!
+            while d.next != nil && d.next!.val == pre.val  {
+                d.next = d.next!.next
+            }
+        } else {
+            d = d.next!
+        }
+    }
+    
+    return dummyHead.next
+}
