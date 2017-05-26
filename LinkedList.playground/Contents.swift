@@ -314,7 +314,7 @@ func deleteDuplicatesII(_ head: ListNode?) -> ListNode? {
     
     while d.next != nil && d.next!.next != nil {
         if d.next!.val == d.next!.next!.val {
-            var pre = d.next!
+            let pre = d.next!
             while d.next != nil && d.next!.val == pre.val  {
                 d.next = d.next!.next
             }
@@ -325,3 +325,49 @@ func deleteDuplicatesII(_ head: ListNode?) -> ListNode? {
     
     return dummyHead.next
 }
+
+/*:
+ ## Remove Nth Node From End of List
+ Given a linked list, remove the nth node from the end of list and return its head.
+ 
+ For example,
+ 
+ Given linked list: 1->2->3->4->5, and n = 2.
+ 
+ After removing the second node from the end, the linked list becomes 1->2->3->5.
+ Note:
+ Given n will always be valid.
+ Try to do this in one pass.
+ 
+ Idea: fast and slow pointers, create a n step gap between slow and fast. move slow and fast together until fast = nil, then slow is the point you want.
+ 
+ Example:
+ n = 2
+ 
+ || - || - || - || - || - || - nil
+                ^               ^
+                slow           fast
+ */
+
+func removeNthFromEnd(_ head: ListNode?, _ n: Int) -> ListNode? {
+    let dummy = ListNode(0)
+    dummy.next = head
+    var prev: ListNode? = dummy
+    var post: ListNode? = dummy
+    
+    // move post
+    for _ in 0 ..< n {
+        post = post!.next
+    }
+    
+    // move prev and post at the same time
+    while post!.next != nil {
+        prev = prev!.next
+        post = post!.next
+    }
+    
+    prev!.next = prev!.next!.next
+    
+    return dummy.next
+}
+
