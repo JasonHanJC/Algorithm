@@ -371,3 +371,50 @@ func removeNthFromEnd(_ head: ListNode?, _ n: Int) -> ListNode? {
     return dummy.next
 }
 
+/*:
+ ## Reorder List
+ Given a singly linked list L: L0→L1→…→Ln-1→Ln,
+ reorder it to: L0→Ln→L1→Ln-1→L2→Ln-2→…
+ 
+ You must do this in-place without altering the nodes' values.
+ 
+ For example,
+ Given {1,2,3,4}, reorder it to {1,4,2,3}.
+ 
+ Idea: Find the middle node, reverse the second half list, then merge two lists
+ */
+
+func reorderList(_ head: ListNode?) {
+    
+    if head == nil || head!.next == nil {
+        return
+    }
+
+    var slow = head, fast = head
+    
+    // find the second half
+    while fast != nil && fast!.next != nil {
+        slow = slow!.next
+        fast = fast!.next!.next
+    }
+    
+    var second = slow!.next
+    slow!.next = nil
+    
+    var first = head
+    
+    // reverse the second
+    second = reverseList(second)
+    
+    while first != nil && second != nil {
+        let fNext = first!.next
+        let sNext = second!.next
+        
+        first!.next = second
+        second!.next = fNext
+        
+        first = fNext
+        second = sNext
+    }
+}
+
