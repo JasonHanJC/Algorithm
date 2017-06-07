@@ -473,3 +473,59 @@ func reverseKGroup(_ head: ListNode?, _ k: Int) -> ListNode? {
     return dummyHead.next
 }
 
+/*:
+ ## Rotate List
+ Given a list, rotate the list to the right by k places, where k is non-negative.
+ 
+ For example:
+ Given 1->2->3->4->5->NULL and k = 2,
+ return 4->5->1->2->3->NULL.
+ 
+ Note: k could be greater than the length of the list.
+ */
+
+func rotateRight(_ head: ListNode?, _ k: Int) -> ListNode? {
+    
+    if head == nil {
+        return head
+    }
+    
+    var prev = head
+    var post = head
+    let len = getLength(head)
+    var k = k % len
+    
+    // create the k gap
+    while k > 0 {
+        post = post!.next
+        k -= 1
+    }
+    
+    while post != nil && post!.next != nil {
+        post = post!.next
+        prev = prev!.next
+    }
+    
+    // make new head
+    post!.next = head
+    let newhead = prev!.next
+    prev!.next = nil
+    
+    return newhead
+}
+
+func getLength(_ head: ListNode?) -> Int {
+    
+    var len = 0
+    var p = head
+    
+    while p != nil {
+        p = p!.next
+        len += 1
+    }
+    
+    return len
+}
+
+
+
