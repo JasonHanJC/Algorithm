@@ -527,5 +527,43 @@ func getLength(_ head: ListNode?) -> Int {
     return len
 }
 
+/*: 
+ ## Swap Nodes in Pairs
+ Given a linked list, swap every two adjacent nodes and return its head.
+ 
+ For example,
+ Given 1->2->3->4, you should return the list as 2->1->4->3.
+ 
+ Your algorithm should use only constant space. You may not modify the values in the list, only nodes itself can be changed.
+ */
+
+func swapPairs(_ head: ListNode?) -> ListNode? {
+    
+    if head == nil || head!.next == nil {
+        return head
+    }
+    
+    let dummyHead = ListNode(0)
+    dummyHead.next = head
+    var p = dummyHead
+    
+    var first = head
+    
+    while first != nil && first!.next != nil {
+        
+        let second = first!.next
+        let nextFirst = second!.next
+        
+        p.next = second
+        second!.next = first
+        first!.next = nextFirst
+        
+        p = first!
+        first = nextFirst
+    }
+    
+    return dummyHead.next
+}
+
 
 
