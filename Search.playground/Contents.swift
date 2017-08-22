@@ -1,7 +1,5 @@
 //: Playground - noun: a place where people can play
 
-import UIKit
-
 /*:
  ## Median of Two Sorted Arrays
  
@@ -378,13 +376,176 @@ func searchInRotatedSortedArrayII(_ nums: [Int], _ target: Int) -> Int {
     return -1
 }
 
-searchInRotatedSortedArrayII([1,3,1,1,1], 3)
+// searchInRotatedSortedArrayII([1,3,1,1,1], 3)
+
+/*:
+ ## Square root of an integer
+ Given an integer x, find square root of it. If x is not a perfect square, then return floor(√x).
+ 
+ Idea: 1 * 1 = 1, and 1 / 2 = 0
+ 2 * 2 = 4, and 4 / 2 = 2
+ 3 * 3 = 9, and 9 / 2 = 4
+ 4 * 4 = 16, and 16 / 2 = 8
+ ...
+ n * n = x
+ We can see that except s == 1, n is always <= x/2.
+ So, n is 1 when x = 1, otherwise n is between 1 and x/2.
+ 
+ Then we can use binary search to find the square root.
+ 
+ */
+
+func sqrt(_ x: Int) -> Int {
+    if x < 0 {
+        return -1
+    }
+    if x == 0 {
+        return x
+    }
+    
+    var left = 1, right = x/2
+    var ans = 1
+    while left <= right {
+        let mid = left + (right - left) / 2
+        let exp = mid * mid
+        if exp == x {
+            return mid
+        }
+        
+        if exp < x {
+            left = mid + 1
+            ans = mid
+        } else {
+            right = mid - 1
+        }
+    }
+    
+    return ans
+}
+
+
+/*
+ ## Search a 2D Matrix
+ Write an efficient algorithm that searches for a value in an m x n matrix. This matrix has the following properties:
+ 
+ Integers in each row are sorted from left to right.
+ The first integer of each row is greater than the last integer of the previous row.
+ For example,
+ 
+ Consider the following matrix:
+ 
+ [
+ [1,   3,  5,  7],
+ [10, 11, 16, 20],
+ [23, 30, 34, 50]
+ ]
+ Given target = 3, return true.
+ 
+ We can treat the matrix as a sorted array.
+ n*m matrix convert to an array: matrix[x][y] -> a[x*m + y]
+ an array convert to a m*n matrix: a[x] -> matrix[x/m][x%m]
+ O(log(m*n))
+ */
+
+func searchMatrix(_ matrix: [[Int]], _ target: Int) -> Bool {
+    let n = matrix.count
+    let m = matrix[0].count
+    
+    var l = 0, r = m * n - 1
+    while l <= r {
+        let mid = (l + r) / 2
+        if matrix[mid/m][mid%m] == target {
+            return true
+        } else if matrix[mid/m][mid%m] < target {
+            l = mid + 1
+        } else {
+            r = mid - 1
+        }
+    }
+    
+    return false;
+}
+
+/*
+ ## Search a 2D Matrix II
+ Write an efficient algorithm that searches for a value in an m x n matrix. This matrix has the following properties:
+ 
+ Integers in each row are sorted in ascending from left to right.
+ Integers in each column are sorted in ascending from top to bottom.
+ For example,
+ 
+ Consider the following matrix:
+ 
+ [
+ [1,   4,  7, 11, 15],
+ [2,   5,  8, 12, 19],
+ [3,   6,  9, 16, 22],
+ [10, 13, 14, 17, 24],
+ [18, 21, 23, 26, 30]
+ ]
+ Given target = 5, return true.
+ 
+ Given target = 20, return false.
+ 
+ */
+
+func searchMatrixII(_ matrix: [[Int]], _ target: Int) -> Bool {
+    guard matrix.count > 0 else {
+        return false
+    }
+    
+    var row = 0, col = matrix[0].count - 1
+    
+    while row < matrix.count && col >= 0 {
+        if matrix[row][col] == target {
+            return true
+        } else if matrix[row][col] < target {
+            row += 1
+        } else {
+            col -= 1
+        }
+    }
+    
+    return false
+}
 
 
 
+/*
+ ## Find Peak Element
+ A peak element is an element that is greater than its neighbors.
+ 
+ Given an input array where num[i] ≠ num[i+1], find a peak element and return its index.
+ 
+ The array may contain multiple peaks, in that case return the index to any one of the peaks is fine.
+ 
+ You may imagine that num[-1] = num[n] = -∞.
+ 
+ For example, in array [1, 2, 3, 1], 3 is a peak element and your function should return the index number 2.
+ 
+ click to show spoilers.
+ 
+ Note:
+ Your solution should be in logarithmic complexity.
+ */
+
+
+/*:
+ ## Find the closest element in Binary Search Tree
+ Given a binary search tree and a target node K. The task is to find the node with minimum absolute difference with given target value K.
+ 
+ */
 
 
 
+/*:
+ ## Find the closest element in Binary Search Tree II
+ Given a binary search tree and a target node K. The task is to find the node with minimum absolute difference with given target value K.
+ 
+ Follow up:
+ Assume that the BST is balanced, could you solve it in less than O(n) runtime (where n = total nodes)?
+ 
+ */
 
 
 
