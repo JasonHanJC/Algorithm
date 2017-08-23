@@ -512,7 +512,7 @@ func searchMatrixII(_ matrix: [[Int]], _ target: Int) -> Bool {
 
 
 /*
- ## Find Peak Element
+ ## Find a Peak Element
  A peak element is an element that is greater than its neighbors.
  
  Given an input array where num[i] ≠ num[i+1], find a peak element and return its index.
@@ -522,12 +522,45 @@ func searchMatrixII(_ matrix: [[Int]], _ target: Int) -> Bool {
  You may imagine that num[-1] = num[n] = -∞.
  
  For example, in array [1, 2, 3, 1], 3 is a peak element and your function should return the index number 2.
- 
- click to show spoilers.
+ For input array {10, 20, 15, 2, 23, 90, 67}, there are two peak elements: 20 and 90.
  
  Note:
  Your solution should be in logarithmic complexity.
+ 
+ O(logn). use binary search. If the middle value is greater than its left and right neighbors, then return it.
+ If middle value is smaller than left neighbor, than there is always a peak value on the left side.
+ If middle value is smaller than right neighbor, than there is always a peak value on the right side.
  */
+
+func findPeakElement(_ nums: [Int]) -> Int {
+    
+    if nums.count <= 1 {
+        return 0
+    }
+    
+    var left = 1
+    var right = nums.count - 2
+    var mid = 0
+    
+    while left <= right {
+        mid = (right - left) / 2 + left
+        if nums[mid] > nums[mid - 1] && nums[mid] > nums[mid + 1] {
+            return mid
+        } else if nums[mid] < nums[mid + 1] {
+            left = mid + 1
+        } else {
+            right = mid - 1
+        }
+    }
+    
+    if nums[left] >= nums[right] {
+        return left
+    } else {
+        return right
+    }
+}
+
+
 
 
 /*:
@@ -536,15 +569,52 @@ func searchMatrixII(_ matrix: [[Int]], _ target: Int) -> Bool {
  
  */
 
+public class TreeNode {
+    public var val: Int
+    public var left: TreeNode?
+    public var right: TreeNode?
+    public init(_ val: Int) {
+        self.val = val
+        self.left = nil
+        self.right = nil
+    }
+}
+
+func closestValue(root: TreeNode?, _ target: Double) -> Int {
+    guard let root = root else {
+        return Int(target)
+    }
+    
+    return _helper(root, target, root.val)
+}
+
+private func _helper(node: TreeNode?, _ target: Double, _ closest: Int) -> Int {
+    guard let node = node else {
+        return closest
+    }
+    
+    var closest = closest
+    if abs(target - Double(node.val)) < abs(target - Double(closest)) {
+        closest = node.val
+    }
+    
+    if Double(node.val) < target {
+        return _helper(node.right, target, closest)
+    } else {
+        return _helper(node.left, target, closest)
+    }
+}
 
 
 /*:
  ## Find the closest element in Binary Search Tree II
- Given a binary search tree and a target node K. The task is to find the node with minimum absolute difference with given target value K.
- 
+ Given a non-empty binary search tree and a target value, find k values in the BST that are closest to the target.
+ Note:
+ Given target value is a floating point.
+ You may assume k is always valid, that is: k ≤ total nodes.
+ You are guaranteed to have only one unique set of k values in the BST that are closest to the target.
  Follow up:
  Assume that the BST is balanced, could you solve it in less than O(n) runtime (where n = total nodes)?
- 
  */
 
 
