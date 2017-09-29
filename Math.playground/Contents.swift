@@ -58,7 +58,7 @@ func isRotationalSymmetricNumber(_ num: Int) -> Bool {
     return true
 }
 
-isRotationalSymmetricNumber(108801)
+//isRotationalSymmetricNumber(108801)
 
 
 /*:
@@ -114,9 +114,16 @@ isRotationalSymmetricNumber(108801)
 //}
 
 /*:
- ##
+ ## Add Binary
+ Given two binary strings, return their sum (also a binary string).
  
+ For example,
+ a = "11"
+ b = "1"
+ Return "100".
  */
+
+
 
 
 

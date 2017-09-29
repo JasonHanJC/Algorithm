@@ -1,23 +1,29 @@
+import PlaygroundSupport
 
-
-import UIKit
 
 func twoSum(_ a:[Int], b:Int) -> [(Int, Int)] {
-    
-    var dic = [Int : Int]()
-    
+  
+    var dic = [Int : [Int]]()
+
     var res = [(Int, Int)]()
     for i in 0..<a.count {
-        if let newK = dic[a[i]] {
-            res.append((newK, i))
+        if let keys = dic[a[i]] {
+            for key in keys {
+                res.append((key, i))
+            }
         } else {
-            dic[b - a[i]] = i
+            
+            if dic[b - a[i]] == nil {
+                dic[b - a[i]] = [i]
+            } else {
+                dic[b - a[i]]!.append(i)
+            }
         }
     }
     return res
 }
 
-twoSum([7, 2, 23, 8, -1, 0, 11, 6] , b: 10)
+//twoSum([7, 2, 2, 23, 8, 8, -1, 0, 11, 6] , b: 10)
 
 /*:
  ## Two Sum with sorted array
@@ -44,8 +50,8 @@ func twoSumWithSorted(_ a: [Int], b: Int) -> (Int, Int)? {
     return nil
 }
 
-let a = [2, 3, 4, 4, 7, 8, 9, 10, 12, 14, 21, 22, 100]
-twoSumWithSorted(a, b: 10)
+//let a = [2, 3, 4, 4, 7, 8, 9, 10, 12, 14, 21, 22, 100]
+//twoSumWithSorted(a, b: 11)
 
 /*:
  ## Two Sum Structure
@@ -78,16 +84,16 @@ class TwoSum {
     }
 }
 
-let twoSum = TwoSum()
-
-twoSum.add(1)
-twoSum.add(3)
-twoSum.add(4)
-twoSum.add(8)
-twoSum.add(6)
-twoSum.add(10)
-
-twoSum.find(8)
+//let twoSum = TwoSum()
+//
+//twoSum.add(1)
+//twoSum.add(3)
+//twoSum.add(4)
+//twoSum.add(8)
+//twoSum.add(6)
+//twoSum.add(10)
+//
+//twoSum.find(8)
 
 /*:
  ## Three Sum
@@ -96,53 +102,57 @@ twoSum.find(8)
 
 func threeSum(_ nums: [Int], target: Int) -> [[Int]]? {
     
-    if (nums.count < 3) {
-        return nil;
+    // Sanity check
+    if nums.count < 3 {
+        return nil
     }
-    
+
+    // Sort the nums and create a empty res
+    let sNums = nums.sorted()
     var res = [[Int]]()
-    
-    let sortedNums = nums.sorted()
-    
-    
-    
-    for i in 0..<sortedNums.count - 2 {
-        
-        // check the duplicate for first number
-        if i == 0 || sortedNums[i] != sortedNums[i - 1] {
-            var j = i + 1
-            var k = sortedNums.count - 1
-    
-            while j < k {
-    
-                if sortedNums[i] + sortedNums[j] + sortedNums[k] == target {
-    
-                    res.append([sortedNums[i], sortedNums[j], sortedNums[k]])
-    
-                    j += 1
-                    k -= 1
-    
-                    // check dupliacte for second and third number
-                    while j < k && sortedNums[j] == sortedNums[j - 1] {
-                        j += 1
+
+    // For loop through every number in sorted nums,
+    // start from index 0 to count - 2
+    for i in 0..<sNums.count - 2 {
+        // Check duplicates, if there are duplicates, continue the loop
+        if i == 0 || sNums[i] != sNums[i - 1] {
+            // Create left and right index
+            var left = i + 1
+            var right = sNums.count - 1
+
+            while left < right {
+                // check whether the sum is equal to target
+                let sum = sNums[i] + sNums[left] + sNums[right]
+                if sum == target {
+                    // add to res
+                    res.append([sNums[i], sNums[left], sNums[right]])
+                    // update the left and right
+                    left = left + 1
+                    right = right - 1
+
+                    // duplicates check for left and right
+                    while left < right && sNums[left - 1] == sNums[left] {
+                        left = left + 1
                     }
-                    while j < k && sortedNums[k] == sortedNums[k + 1] {
-                        k -= 1
+
+                    while right > left && sNums[right + 1] == sNums[right] {
+                        right = right - 1
                     }
-                } else if sortedNums[i] + sortedNums[j] + sortedNums[k] < target {
-                    j += 1
+
+                } else if sum < target {
+                    left = left + 1
                 } else {
-                    k -= 1
+                    right = right - 1
                 }
             }
         }
     }
-    
+
     return res
 }
 
 
-let res = threeSum([-1, 0, 1, 2, -1, -4], target: 0)
+//let res = threeSum([-1, 0, 1, 2, -1, -4], target: 0)
 
 
 /*:
@@ -202,8 +212,8 @@ func fourSum(_ nums: [Int], target: Int) -> [[Int]] {
     return res
 }
 
-
-fourSum([1, 0, -1, 0, -2, 2], target: 0)
+//
+//fourSum([1, 0, -1, 0, -2, 2], target: 0)
 
 
 /*:
@@ -257,7 +267,7 @@ func threeSumCloset(_ nums:[Int], target: Int) -> Int {
     return res
 }
 
-threeSumCloset([-1, 2, 1, -4], target: 1)
+//threeSumCloset([-1, 2, 1, -4], target: 1)
 
 /*:
  ## Minimum Size Subarray Sum
@@ -307,7 +317,7 @@ func minSubArrayLen(_ nums: [Int], s: Int) -> Int {
     }
 }
 
-minSubArrayLen([2,3,1,2,4,3], s: 7)
+//minSubArrayLen([2,3,1,2,4,3], s: 7)
 
 /*:
  ##Remove Duplicates from Sorted Array
@@ -343,8 +353,8 @@ func removeDuplicatesFromSortedArraySolution2(_ nums: inout [Int]) -> Int {
     return j + 1
 }
 
-var removeDuplicatesFromSortedArraySolution2Array = [1,1,2,2,3,4]
-removeDuplicatesFromSortedArraySolution2(&removeDuplicatesFromSortedArraySolution2Array)
+//var removeDuplicatesFromSortedArraySolution2Array = [1,1,2,2,3,4]
+//removeDuplicatesFromSortedArraySolution2(&removeDuplicatesFromSortedArraySolution2Array)
 
 /*:
  ##Remove Duplicates from Sorted Array II
@@ -378,9 +388,9 @@ func removeDuplicatesFromSortedArray_2(_ nums:inout [Int]) -> Int {
     return pre + 1
 }
 
-var input = [1,1,1,1,2,2,3]
-removeDuplicatesFromSortedArray_2(&input)
-
+//var input = [1,1,1,1,2,2,3]
+//removeDuplicatesFromSortedArray_2(&input)
+//
 
 /*:
  ## Remove Element
@@ -406,8 +416,8 @@ func removeElementSolution_1(_ nums: inout [Int], target: Int) -> ArraySlice<Int
     return res
 }
 
-var input_1 = [1,1,1,1,2,2,3]
-removeElementSolution_1(&input_1, target: 1)
+//var input_1 = [1,1,1,1,2,2,3]
+//removeElementSolution_1(&input_1, target: 1)
 
 /*:
  ## Move Zeroes
@@ -432,8 +442,8 @@ func moveZeros(_ nums: inout [Int]) {
     }
 }
 
-var moveZerosArray = [1, 0, 0, 2, 3, 4]
-moveZeros(&moveZerosArray)
+//var moveZerosArray = [1, 0, 0, 2, 3, 4]
+//moveZeros(&moveZerosArray)
 
 
 /*:
@@ -473,7 +483,7 @@ func containerWithMostWater(_ nums: [Int]) -> Int {
     return maxSize
 }
 
-containerWithMostWater([1, 0, 0, 2, 3, 4])
+//containerWithMostWater([1, 0, 0, 2, 3, 4])
 
 
 /*:
@@ -517,7 +527,7 @@ func candy(_ ratings: [Int]) -> Int {
     return res
 }
 
-candy([1,2,2])
+//candy([1,2,2])
 
 /*:
  ##Trapping Rain Water
@@ -569,7 +579,7 @@ func trappingRainWater(_ barHeight: [Int]) -> Int {
     return res
 }
 
-trappingRainWater([0,1,0,2,1,0,1,3,2,1,2,1])
+//trappingRainWater([0,1,0,2,1,0,1,3,2,1,2,1])
 
 /*:
  ##Summary Ranges
@@ -613,7 +623,7 @@ func summaryRanges(_ nums: [Int]) -> [String] {
     return res
 }
 
-summaryRanges([0,1,2,4,5,7])
+//summaryRanges([0,1,2,4,5,7])
 
 /*:
  ## Merge Sorted Array
@@ -682,7 +692,7 @@ func shortestWordDistance(_ words: [String], _ word1: String, _ word2: String) -
     return minDis
 }
 
-shortestWordDistance(["practice", "makes", "perfect", "coding", "makes"], "coding", "practice")
+//shortestWordDistance(["practice", "makes", "perfect", "coding", "makes"], "coding", "practice")
 
 /*:
  ##Shortest Word Distance III
@@ -744,8 +754,8 @@ func intersectionOfArrays(_ array1: [Int], _ array2: [Int]) -> [Int] {
     return Array<Int>(resSet)
 }
 
-let array1 = [1,2,3,4,5,5,6]
-let array2 = [1,5,5,6]
+//let array1 = [1,2,3,4,5,5,6]
+//let array2 = [1,5,5,6]
 
 //intersectionOfArrays(array1, array2)
 
@@ -781,7 +791,7 @@ func intersectionOfArraysII(_ array1: [Int], _ array2: [Int]) -> [Int] {
     return res
 }
 
-intersectionOfArraysII(array1, array2)
+//intersectionOfArraysII(array1, array2)
 
 /*:
  ## Largest Rectangle in Histogram
@@ -1849,5 +1859,111 @@ func mergeIntervals(_ intervals: [Interval]) -> [Interval] {
     
     return res
 }
+
+/*:
+ ## Insert Interval
+ Given a set of non-overlapping intervals, insert a new interval into the intervals (merge if necessary).
+ 
+ You may assume that the intervals were initially sorted according to their start times.
+ 
+ Example 1:
+ Given intervals [1,3],[6,9], insert and merge [2,5] in as [1,5],[6,9].
+ 
+ Example 2:
+ Given [1,2],[3,5],[6,7],[8,10],[12,16], insert and merge [4,9] in as [1,2],[3,10],[12,16].
+ 
+ This is because the new interval [4,9] overlaps with [3,5],[6,7],[8,10].
+ 
+ */
+
+//func insertInterval(_ intervals: [Interval], _ newInterval: Interval) -> [Interval] {
+//
+//    guard intervals.count > 0 else {
+//        return [newInterval]
+//    }
+//
+//
+//
+//}
+
+
+/*:
+ ## Find the point where maximum intervals overlap
+ Given arrival and departure time of employees in an office. Find the maximum no of chairs needed so that at no instance, an employee has to stand.
+ 
+ Input: arrl[] = {1, 2, 9, 5, 5}
+ exit[] = {4, 5, 12, 9, 12}
+ First guest in array arrives at 1 and leaves at 4,
+ second guest arrives at 2 and leaves at 5, and so on.
+ 
+ Output: 5
+ There are maximum 3 guests at time 5.
+ 
+ Slow way:
+ 1) Traverse all intervals and find min and max time (time at which first guest arrives and time at which last guest leaves)
+ 
+ 2) Create a count array of size ‘max – min + 1’. Let the array be count[].
+ 
+ 3) For each interval [x, y], run a loop for i = x to y and do following in loop.
+ count[i – min]++;
+ 
+ 4) Find the index of maximum element in count array. Let this index be ‘max_index’, return max_index + min.
+ Above solution requires O(max-min+1) extra space. Also time complexity of above solution depends on lengths of intervals. In worst case, if all intervals are from ‘min’ to ‘max’, then time complexity becomes O((max-min+1)*n) where n is number of intervals.
+ 
+ Fast way:
+ 
+ Sort all interval times
+ Below are all events sorted by time.  Note that in sorting, if two
+ events have same time, then arrival is preferred over exit.
+ Time     Event Type         Total Number of Guests Present
+ ------------------------------------------------------------
+ 1        Arrival                  1
+ 2        Arrival                  2
+ 4        Exit                     1
+ 5        Arrival                  2
+ 5        Arrival                  3    // Max Guests
+ 5        Exit                     2
+ 9        Exit                     1
+ 10       Arrival                  2
+ 12       Exit                     1
+ 12       Exit                     0
+ 
+ Time Complexity of this method is O(nLogn).
+ */
+
+func maxIntervalOverlap(_ enters: [Int], _ exits: [Int]) -> Int {
+    
+    let sEnters = enters.sorted()
+    let sExits = exits.sorted()
+    
+    var i = 0, j = 0
+    var maxOverlap = 0, current = 0
+    
+    while i < sEnters.count && j < sExits.count {
+        
+        if  sEnters[i] <= sExits[j] {
+            current += 1
+            maxOverlap = max(current, maxOverlap)
+            
+            i += 1
+        } else {
+            current -= 1
+            j += 1
+        }
+    }
+    
+    return maxOverlap
+}
+
+// maxIntervalOverlap([1, 2, 9, 5, 5], [4, 5, 12, 9, 12])
+
+/*:
+ ## Count Inversions in an array
+ The sequence 2, 4, 1, 3, 5 has three inversions (2, 1), (4, 1), (4, 3).
+ */
+
+
+ 
+ 
 
 

@@ -1,6 +1,9 @@
 //: Playground - noun: a place where people can play
 
-import UIKit
+import PlaygroundSupport
+import Foundation
+
+PlaygroundPage.current.needsIndefiniteExecution = true
 
 /*:
  ## One Edit Distance
@@ -163,6 +166,8 @@ func validPalindrome(_ s: String) -> Bool {
     
     let chars = Array(s.lowercased().characters)
     
+    
+    
     var l = 0
     var r = chars.count - 1
     
@@ -215,6 +220,10 @@ func addStrings(_ num1: String, _ num2: String) -> String {
     
     let num1 = Array(num1.characters)
     let num2 = Array(num2.characters)
+    
+    for char in num1 {
+        print(char)
+    }
     
     var res = ""
     var i = num1.count - 1, j = num2.count - 1, sum = 0, carry = 0
@@ -841,8 +850,26 @@ func LongestSubstringWithoutRepeatingCharacters(_ s: String) -> Int {
 
 
 
+/*:
+ ## palindrome substring
+ Given two strings s1 and s2, where s2 is a palindrome, how many substrings(s2) are there if we are allowed to arrange s1 in any order.
+ 
+ Input: aabb aba
+ 
+ Output: 1
+ 
+ Input: aabbaabb aba
+ 
+ Output: 2
+ 
+ Solution: Find the count of each character in s1. Find the count of each character in s2. Find minimum of (count of ‘x’ in s1/count of ‘x’ in s2), where x is any character present in both s1 and s2. Time Complexity: O(n).
+ */
 
 
+
+
+
+PlaygroundPage.current.finishExecution()
 
 
 
