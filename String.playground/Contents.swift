@@ -2,6 +2,7 @@
 
 import PlaygroundSupport
 import Foundation
+import UIKit
 
 PlaygroundPage.current.needsIndefiniteExecution = true
 
@@ -309,7 +310,7 @@ func countAndSay(_ n: Int) -> String {
     return res
 }
 
-countAndSay(4)
+// countAndSay(4)
 
 /*
  ## Detect Capital
@@ -567,7 +568,7 @@ func validAnagram(_ s1: String, _ s2: String) -> Bool {
     return true
 }
 
-validAnagram("affffef", "affefff")
+// validAnagram("affffef", "affefff")
 
 /*:
  ## Group Anagrams
@@ -772,7 +773,7 @@ func reverseStringII(_ s: String, _ k: Int) -> String {
     return String(chars)
 }
 
-reverseStringII("abcd", 2)
+//reverseStringII("abcd", 2)
 
 
 /*:
@@ -864,6 +865,60 @@ func LongestSubstringWithoutRepeatingCharacters(_ s: String) -> Int {
  
  Solution: Find the count of each character in s1. Find the count of each character in s2. Find minimum of (count of ‘x’ in s1/count of ‘x’ in s2), where x is any character present in both s1 and s2. Time Complexity: O(n).
  */
+
+
+
+/*:
+ ## Longest Palindromic Substring
+ 
+ Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
+ 
+ Example:
+ 
+ Input: "babad"
+ 
+ Output: "bab"
+ 
+ Note: "aba" is also a valid answer.
+ Example:
+ 
+ Input: "cbbd"
+ 
+ Output: "bb"
+ 
+ */
+
+var lowIndex = 0
+var maxLen = 0
+
+func longestPalindrome(_ s: String) -> String {
+    
+    if s.count < 2 {
+        return s
+    }
+    
+    let chars = Array(s.characters)
+    
+    for i in 0..<chars.count - 1 {
+        extendPalindrome(chars: chars, a: i, b: i)
+        extendPalindrome(chars: chars, a: i, b: i + 1)
+    }
+    return String(chars[lowIndex..<lowIndex+maxLen])
+}
+
+func extendPalindrome(chars: [Character], a: Int, b: Int) {
+    var a = a, b = b
+    while a >= 0 && b < chars.count && chars[a] == chars[b] {
+        a -= 1
+        b += 1
+    }
+    if maxLen < b - a - 1 {
+        lowIndex = a + 1
+        maxLen = b - a - 1
+    }
+}
+
+// longestPalindrome("cbbd")
 
 
 

@@ -675,17 +675,13 @@ func shortestWordDistance(_ words: [String], _ word1: String, _ word2: String) -
     
     for i in 0...words.count - 1 {
         if words[i] == word1 {
-            
             m = i
-            if n != -1 {
-                minDis = min(minDis, abs(m - n))
-            }
-            
         } else if words[i] == word2 {
             n = i
-            if m != -1 {
-                minDis = min(minDis, abs(m - n))
-            }
+        }
+        
+        if n != -1 && m != -1 {
+            minDis = min(minDis, abs(m - n))
         }
     }
     
@@ -800,6 +796,27 @@ func intersectionOfArraysII(_ array1: [Int], _ array2: [Int]) -> [Int] {
  
  
  */
+
+//func largestRectangle(heights: [Int]) -> Int {
+//
+//    var res = 0
+//    var stack = [Int]()
+//
+//    for var i in 0..<heights.count {
+//
+//        if stack.isEmpty || heights[i] > heights[stack.last!] {
+//            stack.append(i)
+//        } else {
+//
+//
+//
+//            i -= 1
+//        }
+//    }
+//
+//
+//    return res
+//}
 
 
 /*:
@@ -996,6 +1013,8 @@ func findMaxConsecutiveOnes(_ nums: [Int]) -> Int {
  else if m = x, then assign i = i + 1
  else assign i = i − 1
  Return m
+ 
+ 
  */
 
 func majorityElement(_ nums: [Int]) -> Int {
@@ -1101,10 +1120,13 @@ func longestConsecutive(_ nums: [Int]) -> Int {
         if dic[num] != nil {
             continue
         } else {
-            
+            print(num)
             let leftLen = dic[num - 1] ?? 0
+            print("left: \(leftLen)")
             let rightLen = dic[num + 1] ?? 0
+            print("left: \(rightLen)")
             let total = leftLen + rightLen + 1
+            print("total: \(total)")
             
             // update the longest
             longest = max(longest, total)
@@ -1119,13 +1141,15 @@ func longestConsecutive(_ nums: [Int]) -> Int {
             if rightLen != 0 {
                 dic[num + rightLen] = total
             }
+            
+            print(dic)
         }
     }
     
     return longest
 }
 
-//longestConsecutive([0, 1, 2, 3, 4])
+// longestConsecutive([100, 4, 200, 1, 3, 2])
 
 
 /*:
@@ -1228,7 +1252,7 @@ func maximumSizeSubarraySumEqualsK(_ nums: [Int], _ k: Int) -> Int {
     return longest
 }
 
-//maximumSizeSubarraySumEqualsK([1], 0)
+// maximumSizeSubarraySumEqualsK([-2, -1, 2, 1], 1)
 
 /*:
  ## Next Permutation
@@ -1296,13 +1320,11 @@ func nextPermutation(_ nums: inout [Int]) {
 }
 
 func swap<T>(_ nums: inout [T], _ i: Int, _ j: Int) {
-    let tmp = nums[i]
-    nums[i] = nums[j]
-    nums[j] = tmp;
+    (nums[i], nums[j]) = (nums[j], nums[i])
 }
 
 //var nums = [3,2,1]
-//nextPermutation(&nums)
+//    nextPermutation(&nums)
 
 /*:
  ## Number of Boomerangs
@@ -1310,7 +1332,7 @@ func swap<T>(_ nums: inout [T], _ i: Int, _ j: Int) {
  
  Find the number of boomerangs. You may assume that n will be at most 500 and coordinates of points are all in the range [-10000, 10000] (inclusive).
  
- Example:
+ Example:q
  Input:
  [[0,0],[1,0],[2,0]]
  
@@ -1400,7 +1422,7 @@ func productExceptSelf(_ nums: [Int]) -> [Int] {
     return res
 }
 
-// productExceptSelf([1,2,3,4])
+// productExceptSelf([1])
 
 /*:
  ## Rotate Array
@@ -1423,6 +1445,12 @@ func rotateArray(_ nums: inout [Int], _ k: Int) {
     reverseArray(&nums, k, n - 1)
 
 }
+
+/*
+ a = a ^ b
+ b = a ^ b
+ a = a ^ b
+ */
 
 func reverseArray(_ nums: inout [Int], _ l: Int, _ r: Int) {
     
@@ -1829,11 +1857,11 @@ func mergeIntervals(_ intervals: [Interval]) -> [Interval] {
     }
     
     // sort the intervals
-    var intervals = intervals.sorted { (i1, i2) -> Bool in
-        if i1.start == i2.start {
-            return i1.end < i2.end
+    var intervals = intervals.sorted {
+        if $0.start == $1.start {
+            return $0.end < $1.end
         } else {
-            return i1.start < i2.start
+            return $0.start < $1.start
         }
     }
     
@@ -1961,9 +1989,4 @@ func maxIntervalOverlap(_ enters: [Int], _ exits: [Int]) -> Int {
  ## Count Inversions in an array
  The sequence 2, 4, 1, 3, 5 has three inversions (2, 1), (4, 1), (4, 3).
  */
-
-
- 
- 
-
 

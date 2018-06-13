@@ -19,7 +19,27 @@ public class TreeNode {
 
 func isBalanced(_ root: TreeNode?) -> Bool {
     
-    return false
+    return checkHeight(root) != -1
+}
+
+func checkHeight(_ root: TreeNode?) -> Int {
+    
+    if root == nil {
+        return 0
+    }
+    
+    let left = checkHeight(root?.left)
+    let right = checkHeight(root?.right)
+    
+    if left == -1 || right == -1 {
+        return -1
+    }
+    
+    if abs(left - right) > 1 {
+        return -1
+    }
+    
+    return max(left, right) + 1
 }
 
 
@@ -45,8 +65,33 @@ func isBalanced(_ root: TreeNode?) -> Bool {
 
 func levelOrder(_ root: TreeNode?) -> [[Int]] {
     
+    var res = [[Int]]()
     
-    return [[Int]]()
+    if root == nil {
+        return res
+    }
+    
+    var queue = [root]
+    while !queue.isEmpty {
+        let size = queue.count
+        var curLevel = [Int]()
+        
+        for _ in 0..<size {
+            if let curNode = queue.removeFirst() {
+                curLevel.append(curNode.val)
+                
+                if let left = curNode.left {
+                    queue.append(left)
+                }
+                
+                if let right = curNode.right {
+                    queue.append(right)
+                }
+            }
+        }
+        res.append(curLevel)
+    }
+    return res
 }
 
 
@@ -71,7 +116,120 @@ func levelOrder(_ root: TreeNode?) -> [[Int]] {
 
 func levelOrderBottom(_ root: TreeNode?) -> [[Int]] {
     
+    var res = [[Int]]()
     
-    return [[Int]]()
+    if root == nil {
+        return res
+    }
+    
+    var queue = [root]
+    while !queue.isEmpty {
+        let size = queue.count
+        var curLevel = [Int]()
+        
+        for _ in 0..<size {
+            if let curNode = queue.removeFirst() {
+                curLevel.append(curNode.val)
+                
+                if let left = curNode.left {
+                    queue.append(left)
+                }
+                
+                if let right = curNode.right {
+                    queue.append(right)
+                }
+            }
+        }
+        res.insert(curLevel, at: 0)
+    }
+    return res
+}
+
+/*:
+ Binary Tree Right Side View
+ Given a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.
+ 
+ For example:
+ Given the following binary tree,
+ 1            <---
+ /   \
+ 2     3         <---
+ \     \
+ 5     4       <---
+ You should return [1, 3, 4].
+ */
+
+func rightSideView(_ root: TreeNode?) -> [Int] {
+    
+    var res = [Int]()
+    
+    if root == nil {
+        return res
+    }
+    
+    var queue = [root]
+    while !queue.isEmpty {
+        let size = queue.count
+        
+        if let last = queue.last {
+            res.append((last?.val)!)
+        }
+        
+        for _ in 0..<size {
+            if let curNode = queue.removeFirst() {
+
+                if let left = curNode.left {
+                    queue.append(left)
+                }
+                
+                if let right = curNode.right {
+                    queue.append(right)
+                }
+            }
+        }
+    }
+    return res
+}
+
+/*:
+ isSameTree
+ */
+
+func isSameTree(root1: TreeNode?, root2: TreeNode?) -> Bool {
+    
+    if root1 == nil && root2 == nil {
+        return true
+    }
+    
+    if root1 == nil || root2 == nil || root1?.val != root2?.val {
+        return false
+    }
+    
+    return isSameTree(root1: root1?.left, root2: root2?.left) &&
+            isSameTree(root1: root1?.right, root2: root2?.right)
+}
+
+/*:
+ isSymetricTree
+ */
+
+func isSymmetric(root: TreeNode?) -> Bool {
+    guard let root = root else {
+        return true
+    }
+    return helper(root1: root.left, root2: root.right)
+}
+
+func helper(root1: TreeNode?, root2: TreeNode?) -> Bool {
+    if root1 == nil && root2 == nil {
+        return true
+    }
+    
+    if root1 == nil || root2 == nil || root1?.val != root2?.val {
+        return false
+    }
+    
+    return helper(root1: root1?.left, root2: root2?.right) &&
+        helper(root1: root1?.right, root2: root2?.left)
 }
 
